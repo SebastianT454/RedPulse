@@ -3,11 +3,11 @@
 ## ¿Quién hizo esto?
 Estudiantes de Ing Sistemas:
 
-Sebastián Tamayo 
-Juan Manuel Yepes
-Valentina Carmona
-Nicolas Bernal
-Eritz Sanchez
+- Sebastián Tamayo 
+- Juan Manuel Yepes
+- Valentina Carmona
+- Nicolas Bernal
+- Eritz Sanchez
 
 ## ¿Qué es y para qué es?
 
