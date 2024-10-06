@@ -36,7 +36,7 @@ def notificarAdmin(self, tipo_sangre):
         msj = MIMEMultipart()
         
         msj['From'] = self.from_address
-        msj['To'] = "redpulsetst@gmail.com"
+        msj['To'] = "redpulsetst@gmail.com" #poner en SecretConfig
         msj['Subject'] = f"Niveles de sangre {tipo_sangre} bajos"
         
         mensaje = f"Los niveles actuales de la sangre de tipo {tipo_sangre} se encuentran por debajo de lo recomendado, 
