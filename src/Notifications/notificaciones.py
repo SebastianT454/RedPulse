@@ -1,7 +1,7 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-from SecretConfig import NOTIEMAIL, NOTICONTRA
+from Database.SecretConfig import NOTIEMAIL, NOTICONTRA
 
 class Notificaciones:
     def __init__(self,de_email=None, contra=None):
