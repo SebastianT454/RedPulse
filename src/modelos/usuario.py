@@ -7,10 +7,11 @@ class TipoDocumento(Enum):
     CEDULA_EXTRANJERIA = "Cedula de Extranjeria"
 
 class Usuario:
-    def __init__(self, nombre: str, correo: str, numero_documento: str, 
+    def __init__(self, nombre: str, contrasena: str, correo: str, numero_documento: str, 
                  donante: bool, admin: bool, enfermero: bool, 
                  tipo_documento: TipoDocumento):
         self.nombre = nombre
+        self.contrasena = contrasena
         self.correo = correo
         self.numero_documento = numero_documento
         self.donante = donante

@@ -70,11 +70,11 @@ def insertarEnTabla( usuario ):
         # Todas las instrucciones se ejecutan a tavés de un cursor
         cursor.execute(f"""
         insert into usuarios (
-            nombre, correo, numero_documento, donante, admin, enfermero, tipo_documento
+            nombre, contrasena, correo, numero_documento, donante, admin, enfermero, tipo_documento
         )
         values 
         (
-            '{usuario.nombre}',  '{usuario.correo}', '{usuario.numero_documento}', '{usuario.donante}', '{usuario.admin}', '{usuario.enfermero}', '{usuario.tipo_documento}'
+            '{usuario.nombre}',  '{usuario.contrasena}', '{usuario.correo}', '{usuario.numero_documento}', '{usuario.donante}', '{usuario.admin}', '{usuario.enfermero}', '{usuario.tipo_documento}'
         );
                        """)
 
@@ -91,20 +91,20 @@ def obtenerUsuarioPorDocumento( numero_documento ):
     """ Busca un usuario por el numero de documento y lo retornamos como objeto """
 
     cursor = obtenerCursor()
-    cursor.execute(f"SELECT nombre, correo, numero_documento, donante, admin, enfermero, tipo_documento from usuarios where numero_documento = '{numero_documento}' ")
+    cursor.execute(f"SELECT nombre, contrasena, correo, numero_documento, donante, admin, enfermero, tipo_documento from usuarios where numero_documento = '{numero_documento}' ")
     row = cursor.fetchone()
 
     if row is None:
         raise ErrorNotFound("El usuario buscado, no fue encontrado. Numero documento: " + str(numero_documento))
 
-    result = Usuario( row[0], row[1], row[2], row[3], row[4], row[5], row[6] )
+    result = Usuario( row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7] )
     return result
 
 def verificarExistenciaUsuario( numero_documento ):
     """ Busca un usuario por el numero de documento y validamos si existe """
 
     cursor = obtenerCursor()
-    cursor.execute(f"SELECT nombre, correo, numero_documento, donante, admin, enfermero, tipo_documento from usuarios where numero_documento = '{numero_documento}' ")
+    cursor.execute(f"SELECT nombre, contrasena, correo, numero_documento, donante, admin, enfermero, tipo_documento from usuarios where numero_documento = '{numero_documento}' ")
     row = cursor.fetchone()
 
     if row is None:
