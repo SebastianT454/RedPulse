@@ -50,6 +50,11 @@ def login():
 def perfil():
     return render_template('perfil.html')
 
+@app.route('/return_home')
+def close_login():
+    session['account_verification_result'] = None
+    return redirect(url_for('home'))
+
 @app.route('/registrarse', methods=['GET', 'POST'])
 def registrarse():
     if request.method == 'POST':
@@ -64,15 +69,6 @@ def registrarse():
         # Definir el nombre completo.
         nombre_completo = nombre + ' ' + apellido
 
-        # Guardar los datos en la sesión
-        session['user_data'] = {
-            'nombre_completo': nombre_completo,
-            'contrasena': contrasena,
-            'correo': correo,
-            'numero_documento': numero_documento,
-            'tipo_documento': tipo_documento
-        }
-
         # Verificar si la cuenta ya existe
         exists = verificarExistenciaUsuario(numero_documento)
 
@@ -82,7 +78,16 @@ def registrarse():
         # Crear el usuario en el sistema.
         if not exists:
             registrarUsuario(nombre_completo, contrasena, correo, numero_documento, False, False, False, tipo_documento)
-    
+
+            # Guardar los datos en la sesión
+            session['user_data'] = {
+                'nombre_completo': nombre_completo,
+                'contrasena': contrasena,
+                'correo': correo,
+                'numero_documento': numero_documento,
+                'tipo_documento': tipo_documento
+            }
+        
     return render_template('registrarse.html')
 
 
