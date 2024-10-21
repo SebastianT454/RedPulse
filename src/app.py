@@ -10,7 +10,7 @@ from servicios.usuario_bd_servicio import *
 
 # app principal del Flask
 app = Flask(__name__, template_folder = os.path.join(os.path.pardir, 'templates'))
-app.secret_key = 'j98h3y2qweRTY8uiopASDFGHJKLZXCVBNM,./1234567890-=`~!@#$%^&*()_+[]{}|;:?><'
+app.secret_key = secret_config.SECRET_KEY_FLASK
 
 #////////////////////////////// Funcionalidades //////////////////////////////////////////////
 @app.route('/')
