@@ -7,7 +7,7 @@ from controladores.aunteticacion_controlador import *
 
 # Base de datos.
 from servicios.usuario_bd_servicio import *
-from servicios.chatbot_service import *
+from servicios.chatbot_servicio import *
 
 # app principal del Flask
 app = Flask(__name__, template_folder = os.path.join(os.path.pardir, 'templates'))
