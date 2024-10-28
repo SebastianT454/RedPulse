@@ -7,6 +7,7 @@ from controladores.aunteticacion_controlador import *
 
 # Base de datos.
 from servicios.usuario_bd_servicio import *
+from servicios.chatbot_service import *
 
 # app principal del Flask
 app = Flask(__name__, template_folder = os.path.join(os.path.pardir, 'templates'))
@@ -89,6 +90,13 @@ def registrarse():
             }
         
     return render_template('registrarse.html')
+
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    data = request.get_json()
+    user_message = data.get("message")
+    response_text = generate_response(user_message)
+    return jsonify({"response": response_text})
 
 
 if __name__ == '__main__':
