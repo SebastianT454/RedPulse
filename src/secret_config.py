@@ -14,3 +14,5 @@ NOTICONTRA = "redpulse.123"
 SECRET_KEY_FLASK = "j98h3y2qweRTY8uiopASDFGHJKLZXCVBNM,./1234567890-=`~!@#$%^&*()_+[]{}|;:?><"
 
 CHAT_BOT_KEY = "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"
+
+ADMINEMAIL = "redpulsetst@gmail.com"
