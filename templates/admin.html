@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Donaciones - RedPulse</title>
+    <link rel="stylesheet" href="/css/stylesAdmin.css">
+    
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a class="no-underline">
+                <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="donations.html">Solicitudes de Donacion</a></li>
+                    <li><a href="logout.html">Cerrar sesión</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section class="charts">
+                <div class="chart-container">
+                    <h2>Donaciones por Mes</h2>
+                    <canvas id="monthlyDonationsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h2>Cantidad de Sangre por Tipo</h2>
+                    <canvas id="bloodTypeChart"></canvas>
+                </div>
+            </section>
+
+            <section class="donations-list">
+                <h2>Solicitudes de Donación Pendientes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donante</th>
+                            <th>Tipo de Sangre</th>
+                            <th>Cantidad (ml)</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Juan Pérez</td>
+                            <td>A+</td>
+                            <td>500</td>
+                            <td>2024-10-26</td>
+                            <td>
+                                <button class="approve-button">Aprobar</button>
+                                <button class="reject-button">Rechazar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>María López</td>
+                            <td>O-</td>
+                            <td>450</td>
+                            <td>2024-10-28</td>
+                            <td>
+                                <button class="approve-button">Aprobar</button>
+                                <button class="reject-button">Rechazar</button>
+                            </td>
+                        </tr>
+                        <!-- Agregar más filas según sea necesario -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Enlace a Chart.js desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Gráfico de donaciones por mes
+        const monthlyDonationsCtx = document.getElementById('monthlyDonationsChart').getContext('2d');
+        const monthlyDonationsChart = new Chart(monthlyDonationsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                datasets: [{
+                    label: 'Donaciones',
+                    data: [20, 15, 30, 25, 20, 10, 18, 24, 22, 30, 28, 32], // Datos de ejemplo
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Gráfico de cantidad de sangre por tipo
+        const bloodTypeCtx = document.getElementById('bloodTypeChart').getContext('2d');
+        const bloodTypeChart = new Chart(bloodTypeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                datasets: [{
+                    label: 'Cantidad de Sangre (ml)',
+                    data: [1500, 900, 1200, 800, 700, 500, 2500, 2000], // Datos de ejemplo
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#36A2EB'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedPulse - ChatBot</title>
+    <link rel="stylesheet" href="stylesChatbot.css">
+</head>
+<body>
+    <!-- Encabezado RedPulse -->
+    <header class="header">
+        <a href="home.html" class="no-underline">
+            <h1><span class="red">Red</span><span class="pulse">Pulse</span><span class="dot">●</span></h1>
+        </a>
+    </header>
+
+    <!-- Contenedor del Chatbot -->
+    <div class="chatbot-container">
+        <!-- Ventana de mensajes -->
+        <div id="chat-window" class="chat-window">
+            <div class="message bot-message">¡Hola! Soy el asistente de RedPulse. ¿En qué puedo ayudarte?</div>
+        </div>
+        
+        <!-- Entrada de usuario -->
+        <div class="chat-input-container">
+            <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            if (message) {
+                // Agregar mensaje del usuario
+                const chatWindow = document.getElementById('chat-window');
+                const userMessage = document.createElement('div');
+                userMessage.classList.add('message', 'user-message');
+                userMessage.textContent = message;
+                chatWindow.appendChild(userMessage);
+
+                // Limpiar el campo de entrada
+                userInput.value = '';
+
+                // Simular respuesta del chatbot
+                setTimeout(() => {
+                    const botMessage = document.createElement('div');
+                    botMessage.classList.add('message', 'bot-message');
+                    botMessage.textContent = "Estoy procesando tu solicitud...";
+                    chatWindow.appendChild(botMessage);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                }, 1000);
+
+                // Desplazar al final del chat
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>

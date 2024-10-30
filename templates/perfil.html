@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedPulse</title>
+    <link rel="stylesheet" href="/css/stylesPerfil.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="{{ url_for('home') }}" class="no-underline">
+                <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Inicio</a></li>
+                    <li><a href="#">Puntos</a></li>
+                    <li><a href="#">ChatBot</a></li>
+                    <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section class="welcome">
+                <h2>Bienvenido/a</h2>
+                <h3>{{ user_data['nombre_completo'] }}</h3>
+                <p>La verdadera alegría de la vida consiste en dar el regalo de la vida, <strong>dona sangre</strong></p>
+            </section>
+
+            <section class="blood-info">
+                <div class="blood-type">SANGRE: {{ user_data['tipo_de_sangre'] }}</div>
+                <div class="request-now">
+                    <img src="{{ user_data['perfil_imagen_link'] }}" referrerpolicy="no-referrer" alt="Profile Picture" class="profile-picture">
+                    <button onclick="redirectToView()" class="request-button">Solicitar Sangre</button>
+                </div>
+            </section>
+            <section class="stats">
+                <a href="#" class="stat points-link">
+                    <div>
+                        <h4>Puntos</h4>
+                        <p>0</p>
+                    </div>
+                </a>
+                <div class="stat">
+                    <h4>Donado</h4>
+                    <p>450 ml</p>
+                </div>
+
+                <div class="stat">
+                    <h4>Proxima Campaña</h4>
+                    <p>31/10/2024</p>
+                </div>
+
+            </section>
+            
+            
+        </main>
+    </div>
+
+    <!-- Modal de éxito -->
+    <div id="success-message">
+        <div class="success-content">
+            <h2>¡Solicitud enviada exitosamente!</h2>
+            <a href="#">Volver al perfil</a> 
+        </div>
+    </div>
+
+    <script>
+        function redirectToView() {
+            window.location.href = 'solicitud_donacion.html'; // Cambia 'tu-vista.html' por la URL a la que quieras redirigir
+        }
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario - RedPulse</title>
+    <link rel="stylesheet" href="stylesRegistro.css">
+</head>
+<body>
+
+    <!-- Modal Container -->
+    <div class="modal">
+        <!-- Modal Left (Form Section) -->
+        <div class="modal-left">
+            <a href="{{ url_for('close_login') }}" class="close-btn">&times;</a>
+
+            <h2>Crear Cuenta</h2>
+            <form id="registerForm" method="POST" enctype="multipart/form-data">
+                <div class="name-lastname">
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="text" name="apellido" placeholder="Apellido" required>
+                </div>
+                <select name="tipo_documento" required>
+                    <option value="">Seleccione Tipo de Documento</option>
+                    <option value="Cedula de Ciudadania">Cédula de Ciudadanía</option>
+                    <option value="Cedula de Extranjeria">Cédula de Extranjería</option>
+                </select>
+                <input type="text" name="numero_documento" placeholder="Número de Documento" required>
+                <input type="email" name="correo" placeholder="Correo Electrónico" required>
+                <input type="password" name="contrasena" placeholder="Contraseña" required>
+                <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña" required>
+                
+                <!-- Nueva Sección de Imagen -->
+                <input type="file" name="profile_image" accept="image/*" placeholder="foto de perfil (opcional)">
+                
+                <div class="register-terms">
+                    <input type="checkbox" required> Acepto los <a href="#">Términos y Condiciones</a>
+                </div>
+                <button type="submit">Crear Cuenta</button>
+            </form>
+        </div>
+
+        <div class="modal-right"></div>
+    </div>
+
+</body>
+</html>
