@@ -2,7 +2,7 @@ from servicios.usuario_bd_servicio import obtenerUsuarioPorDocumento, actualizar
 from servicios.registro_bd_servicio import insertarEnTabla as insertarRegistro
 from modelos.registro import Registro, TipoRegistro, TipoSangre
 
-def agregar_donacion(tipo_documento, numero_documento, cantidad_donada, tipo_sangre, razon="Donación", comentarios="", prioridad=6):
+def agregar_donacion(tipo_documento, numero_documento, cantidad_donada, tipo_sangre, razon="Donación", comentarios="", prioridad=5):
     try:
         usuario = obtenerUsuarioPorDocumento(numero_documento)
 

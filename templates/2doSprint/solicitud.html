@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedPulse - Solicitud de Sangre</title>
+    <link rel="stylesheet" href="stylesSolicitudDonacion.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="solicitante.html" class="no-underline">
+                <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="home.html">Inicio</a></li>
+                    <li><a href="#">Donaciones</a></li>
+                    <li><a href="feed.html">Perfil</a></li>
+                    <li><a href="#">Cerrar sesión</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section class="welcome">
+                <h2>Solicitud de Sangre</h2>
+                <p>Complete los siguientes datos para realizar la solicitud de sangre.</p>
+            </section>
+
+            <section class="request-form">
+                <form action="submit_request.html" method="post" enctype="multipart/form-data">
+                    <label for="request-id">ID de Solicitud:</label>
+                    <input type="text" id="request-id" name="request-id" required>
+
+                    <label for="record-type">Tipo de Registro:</label>
+                    <select id="record-type" name="record-type" required>
+                        <option value="">Seleccione</option>
+                        <option value="Donacion">A+</option>
+                        <option value="Solicitud">A-</option>
+                    </select>
+
+                    <label for="blood-type">Tipo de Sangre:</label>
+                    <select id="blood-type" name="blood-type" required>
+                        <option value="">Seleccione</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+
+                    <label for="quantity">Cantidad (ml):</label>
+                    <input type="number" id="quantity" name="quantity" min="0" required>
+
+                    <label for="reason">Razón de la Solicitud:</label>
+                    <textarea id="reason" name="reason" rows="3" required></textarea>
+
+                    <label for="comments">Comentarios Adicionales:</label>
+                    <textarea id="comments" name="comments" rows="3"></textarea>
+
+                    <label for="user-documents">Documentos de Usuario:</label>
+                    <input type="file" id="user-documents" name="user-documents" accept=".pdf,.jpg,.png" multiple>
+
+                    <label for="priority">Prioridad:</label>
+                    <select id="priority" name="priority" required>
+                        <option value="">Seleccione</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+
+                    <div class="button-container">
+                        <button type="submit" class="confirm-button">Enviar Solicitud</button>
+                        <button type="button" class="cancel-button" onclick="window.location.href='donante.html'">Cancelar</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

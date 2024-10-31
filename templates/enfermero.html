@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista Enfermero</title>
+    <link rel="stylesheet" href="/css/stylesEnfermero.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a class="no-underline">
+                <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#">CerrarSesion</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section class="welcome">
+                <h2>Bienvenido Enfermero</h2>
+            </section>
+
+            <form onsubmit="handleCedulaVerification(event)">
+                <div class="form-group">
+                    <label for="cedula">Ingrese Cédula del Donante</label>
+                    <input type="text" id="cedula" name="cedula" placeholder="Ingrese la cédula" required>
+                </div>
+                <button type="submit" class="submit-button">Verificar Cédula</button>
+            </form>
+
+            <div id="success-message">Cédula verificada exitosamente. Redirigiendo a la sección de agregar donación...</div>
+            <div id="error-message">Cédula no registrada. Intente nuevamente.</div>
+        </main>
+    </div>
+
+    <script>
+        function handleCedulaVerification(event) {
+            event.preventDefault();
+            const cedula = document.getElementById('cedula').value;
+
+            // Simulación de verificación de cédula
+            const isRegistered = verifyCedulaBackend(cedula);
+
+            if (isRegistered) {
+                document.getElementById('success-message').style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'agregar_donacion.html';
+                }, 2000); // Redirige después de 2 segundos
+            } else {
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        function verifyCedulaBackend(cedula) {
+            // Lógica simulada de verificación
+            const registeredCedulas = ['123456789', '987654321']; // Ejemplo de cédulas registradas
+            return registeredCedulas.includes(cedula);
+        }
+    </script>
+</body>
+</html>

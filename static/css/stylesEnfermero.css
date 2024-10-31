@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #f2f4f8;
+    color: #333;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.header h1 {
+    font-size: 32px;
+    font-weight: 600;
+}
+.header .red {
+    color: #000000;
+}
+.header .pulse {
+    color: #B93A32;
+}
+.header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.header nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+.header nav a:hover {
+    color: #B93A32;
+}
+.main-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.welcome {
+    margin-bottom: 20px;
+}
+.welcome h2 {
+    font-size: 26px;
+    color: #B93A32;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    font-size: 18px;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+}
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.submit-button {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #B93A32;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.submit-button:hover {
+    background-color: #a12c2a;
+}
+#success-message, #error-message {
+    display: none;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center;
+}
+#success-message {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+#error-message {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.no-underline {
+  text-decoration: none;
+}

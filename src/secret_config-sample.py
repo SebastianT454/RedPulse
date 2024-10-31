@@ -16,3 +16,14 @@ PGPORT = 5432 # POR DEFECTO ES 5432, PERO PUEDE CAMBIAR EN SU DB
 # Token para bot de notificaciones.
 NOTIEMAIL = "CORREO DEL BOT"
 NOTICONTRA = "CONTRASEÑA CORREO BOT"
+
+# Secret key para el apartado web (Flask)
+
+SECRET_KEY_FLASK = "CONTRASEÑA ESPECIAL DEL FLASK"
+
+# Key para ChatGpt Api
+
+CHAT_BOT_KEY = "TOKEN PARA EL API DE GPT"
+
+# Correo destinado del administrador
+ADMINEMAIL = "CORREO DEL ADMINISTRADOR O EMPRESA"
