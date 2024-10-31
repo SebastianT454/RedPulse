@@ -4,32 +4,246 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedPulse</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="/css/stylesPerfil.css">
+=======
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f2f4f8; /* Color de fondo más suave */
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .header .red {
+            color: #000000; /* Color negro para "Red" */
+        }
+
+        .header .pulse {
+            color: #B93A32; /* Rojo vibrante para "Pulse" */
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        .header nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .header nav a:hover {
+            color: #B93A32; /* Color al pasar el ratón */
+        }
+
+        .main-content {
+            background-color: #ffffff;
+            padding: 30px; /* Aumentado para mejor espaciado */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome {
+            margin-bottom: 20px;
+        }
+
+        .welcome h2 {
+            font-size: 26px;
+            color: #B93A32; /* Rojo vibrante */
+        }
+
+        .welcome h3 {
+            font-size: 22px;
+            margin: 10px 0;
+        }
+
+        .blood-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .blood-type {
+            font-size: 22px;
+            font-weight: bold;
+            color: #B93A32; /* Rojo vibrante */
+            padding: 10px 20px;
+            background-color: #ffe9e5; /* Fondo suave */
+            border-radius: 5px;
+        }
+
+        .donate-now {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-picture {
+            width: 120px; /* Tamaño aumentado */
+            height: 120px; /* Tamaño aumentado */
+            border-radius: 50%;
+            margin-right: 15px; /* Espaciado ajustado */
+            border: 2px solid #B93A32; /* Añadido borde a la imagen */
+            object-fit: cover; /* Mantiene la proporción de la imagen */
+        }
+
+        .donate-button {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #B93A32;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .donate-button:hover {
+            background-color: #B93A32; /* Color más oscuro al pasar el ratón */
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .stat {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat h4 {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #B93A32; /* Rojo vibrante */
+        }
+
+        .stat p {
+            font-size: 24px; /* Tamaño de fuente aumentado para los valores */
+            font-weight: bold;
+        }
+
+        /* Estilos para el mensaje de éxito */
+        #success-message {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        #success-message.active {
+            display: flex; /* Mostrar el mensaje cuando se activa la clase */
+        }
+
+        .success-content {
+            background-color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .success-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .success-content a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #B93A32;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+    </style>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
 </head>
 <body>
     <div class="container">
         <header class="header">
+<<<<<<< HEAD
             <a href="{{ url_for('home') }}" class="no-underline">
                 <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
             </a>
+=======
+            <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Inicio</a></li>
                     <li><a href="#">Puntos</a></li>
+<<<<<<< HEAD
                     <li><a href="#">ChatBot</a></li>
                     <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+=======
+                    <li><a href="#">Solicitudes</a></li>
+                    <li><a href="#">ChatBot</a></li>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
                 </ul>
             </nav>
         </header>
 
         <main class="main-content">
             <section class="welcome">
+<<<<<<< HEAD
                 <h2>Bienvenido/a</h2>
                 <h3>{{ user_data['nombre_completo'] }}</h3>
+=======
+                <h2>Bienvenida</h2>
+                <h3>Camila Yepes</h3>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
                 <p>La verdadera alegría de la vida consiste en dar el regalo de la vida, <strong>dona sangre</strong></p>
             </section>
 
             <section class="blood-info">
+<<<<<<< HEAD
                 <div class="blood-type">SANGRE: {{ user_data['tipo_de_sangre'] }}</div>
                 <div class="request-now">
                     <img src="{{ user_data['perfil_imagen_link'] }}" referrerpolicy="no-referrer" alt="Profile Picture" class="profile-picture">
@@ -43,10 +257,25 @@
                         <p>0</p>
                     </div>
                 </a>
+=======
+                <div class="blood-type">SANGRE: A+</div>
+                <div class="donate-now">
+                    <img src="https://i.pinimg.com/474x/65/25/a0/6525a08f1df98a2e3a545fe2ace4be47.jpg" alt="Profile Picture" class="profile-picture">
+                    <button onclick="showRequestMessage()" class="donate-button">Solicitar Sangre</button>
+                </div>
+            </section>
+
+            <section class="stats">
+                <div class="stat">
+                    <h4>Puntos</h4>
+                    <p>+14k</p>
+                </div>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
                 <div class="stat">
                     <h4>Donado</h4>
                     <p>450 ml</p>
                 </div>
+<<<<<<< HEAD
 
                 <div class="stat">
                     <h4>Proxima Campaña</h4>
@@ -56,6 +285,13 @@
             </section>
             
             
+=======
+                <div class="stat">
+                    <h4>Avisos</h4>
+                    <p>3 Avisos</p>
+                </div>
+            </section>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
         </main>
     </div>
 
@@ -63,11 +299,16 @@
     <div id="success-message">
         <div class="success-content">
             <h2>¡Solicitud enviada exitosamente!</h2>
+<<<<<<< HEAD
             <a href="#">Volver al perfil</a> 
+=======
+            <a href="{{ url_for('perfil') }}">Volver al perfil</a> 
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
         </div>
     </div>
 
     <script>
+<<<<<<< HEAD
         function redirectToView() {
             window.location.href = 'solicitud_donacion.html'; // Cambia 'tu-vista.html' por la URL a la que quieras redirigir
         }
@@ -75,3 +316,12 @@
 
 </body>
 </html>
+=======
+        function showRequestMessage() {
+            document.getElementById('success-message').classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d

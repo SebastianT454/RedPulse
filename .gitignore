@@ -1,6 +1,10 @@
 # Modulo de datos secretos, nunca debe subirse al repo
 src/secret_config.py
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

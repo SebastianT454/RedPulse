@@ -3,32 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Login RedPulse</title>
-    <link rel="stylesheet" href="/css/stylesLogin.css">
-
-=======
-    <title>Modal Login RedPulse</title>
+    <title>Registro de Usuario - RedPulse</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/020/736/346/small_2x/gradient-color-abstract-background-gradient-mesh-design-for-covers-wallpapers-branding-business-cards-social-media-website-others-you-can-use-the-gradient-texture-for-backgrounds-vector.jpg'); /* Reemplaza con la URL de la imagen de fondo */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+          font-family: 'Quicksand', sans-serif;
+          background-image: url('https://static.vecteezy.com/system/resources/thumbnails/020/736/346/small_2x/gradient-color-abstract-background-gradient-mesh-design-for-covers-wallpapers-branding-business-cards-social-media-website-others-you-can-use-the-gradient-texture-for-backgrounds-vector.jpg'); /* Reemplaza con la URL de la imagen de fondo */
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          height: 100vh;
+          margin: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         .modal {
             background-color: white;
             border-radius: 10px;
-            width: 750px;
+            width: 900px;
             max-width: 90%;
             display: flex;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
@@ -52,6 +47,15 @@
             min-height: 400px; /* Para asegurarte de que se vea bien la imagen */
         }
 
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #B93A32;
+        }
+
         .modal h2 {
             font-size: 24px;
             color: black;
@@ -63,12 +67,21 @@
             flex-direction: column;
         }
 
-        .modal input {
+        .modal input, .modal select {
+            font-family: 'Quicksand', sans-serif;
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            font-family: 'Quicksand', sans-serif;
+        }
+
+        .name-lastname {
+            display: flex;
+            gap: 10px; /* Espacio entre los campos */
+        }
+
+        .name-lastname input {
+            flex: 1;
         }
 
         .modal button {
@@ -79,34 +92,16 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            font-family: 'Quicksand', sans-serif;
         }
 
-        .forgot-password {
-            text-align: right;
+        .register-terms {
             font-size: 12px;
-            color: #B93A32;
             margin-bottom: 20px;
         }
 
-        .register-link {
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .register-link a {
+        .register-terms a {
             color: #B93A32;
             text-decoration: none;
-            font-weight: bold;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #B93A32;
         }
 
         /* Estilos para el mensaje de éxito */
@@ -181,7 +176,6 @@
         }
 
     </style>
->>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
 </head>
 <body>
 
@@ -191,56 +185,43 @@
         <div class="modal-left">
           <a href="{{ url_for('close_login') }}" class="close-btn">&times;</a>
 
-            <h2>¡Hola de nuevo!</h2>
-            <form id="loginForm" method="POST">
-                <input type="text" name="numero_documento" placeholder="Número de Documento" required>
-<<<<<<< HEAD
+            <h2>Crear Cuenta</h2>
+            <form id="registerForm" method="POST">
+                <div class="name-lastname">
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="text" name="apellido" placeholder="Apellido" required>
+                </div>
                 <select name="tipo_documento" required>
                     <option value="">Seleccione Tipo de Documento</option>
                     <option value="Cedula de Ciudadania">Cédula de Ciudadanía</option>
                     <option value="Cedula de Extranjeria">Cédula de Extranjería</option>
                 </select>
-=======
->>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
+                <input type="text" name="numero_documento" placeholder="Número de Documento" required>
+                <input type="email" name="correo" placeholder="Correo Electrónico" required>
                 <input type="password" name="contrasena" placeholder="Contraseña" required>
-                <div class="forgot-password"><a href="#">¿Olvidó la contraseña?</a></div>
-                
-                <button type="submit">Ingresar</button>
+                <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña" required>
+                <div class="register-terms">
+                    <input type="checkbox" required> Acepto los <a href="#">Términos y Condiciones</a>
+                </div>
+                <button type="submit">Crear Cuenta</button>
             </form>
-
-            <div class="register-link">
-<<<<<<< HEAD
-                ¿No tienes una cuenta? <a href="{{ url_for('registro') }}">Regístrate</a>
-=======
-                ¿No tienes una cuenta? <a href="{{ url_for('registrarse') }}">Regístrate</a>
->>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
-            </div>
         </div>
 
-        <!-- Modal Right (Image Section) -->
         <div class="modal-right"></div>
     </div>
 
     <!-- Modal de éxito -->
-<<<<<<< HEAD
-    <div id="success-message" {% if session.login_verificacion_resultado == True %}class="active"{% endif %}>
-=======
-    <div id="success-message" {% if session.account_verification_result == True %}class="active"{% endif %}>
->>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
+    <div id="success-message" {% if session.account_verification_result == False %}class="active"{% endif %}>
         <div class="success-content">
-            <h2>¡Bienvenido a Red Pulse!</h2>
+            <h2>¡Cuenta creada exitosamente!</h2>
             <button onclick="submitForm()">Volver al inicio</button>
         </div>
     </div>
 
     <!-- Modal de error -->
-<<<<<<< HEAD
-    <div id="error-message" {% if session.login_verificacion_resultado == False %}class="active"{% endif %}>
-=======
-    <div id="error-message" {% if session.account_verification_result == False %}class="active"{% endif %}>
->>>>>>> 1991f9e0f0edf505af3015b583149403eb8aa27d
+    <div id="error-message" {% if session.account_verification_result == True %}class="active"{% endif %}>
         <div class="error-content">
-            <h2>¡Numero de documento o contraseña inexistentes o incorrectos!</h2>
+            <h2>¡La cuenta ya existe!</h2>
             <button onclick="closeErrorMessage()">Cerrar</button>
         </div>
     </div>
