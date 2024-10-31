@@ -30,15 +30,19 @@ def verificacionLogin(numero_documento: str, tipo_documento: TipoDocumento, cont
     return True
 
 def registrarUsuario(nombre: str, contrasena: str, correo: str, numero_documento: str, 
-                donante: bool, admin: bool, enfermero: bool, tipo_de_sangre: TipoSangre,
-                 tipo_documento: TipoDocumento, perfil_imagen_link: str, perfil_imagen_deletehash: str):
+                donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
+                tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
+                perfil_imagen_deletehash: str):
+    
     # Lógica para registrar un nuevo usuario
 
     # Encriptar contraseña.
     contrasena_encriptada = generate_password_hash(contrasena, 'pbkdf2:sha256', 10)
 
     # Crear el usuario ya que no existe.
-    usuario = Usuario(nombre, contrasena_encriptada, correo, numero_documento, donante, admin, enfermero, tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
+    usuario = Usuario(nombre, contrasena_encriptada, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, 
+                      tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
+    
     insertarEnTabla(usuario)
 
 def verificarUsuario(numero_documento: str, tipo_documento: TipoDocumento):

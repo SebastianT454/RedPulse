@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedPulse - Agregar Donación</title>
-    <link rel="stylesheet" href="stylesAddDonation.css">
+    <link rel="stylesheet" href="stylesAgregarDonacion.css">
 </head>
 <body>
     <div class="container">
         <!-- Header con menú -->
         <header class="header">
-            <a href="solicitante.html" class="no-underline">
+            <a href="#" class="no-underline">
                 <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
             </a>
             <nav>
                 <ul>
-                    <li><a href="home.html">Inicio</a></li>
-                    <li><a href="puntos.html">Puntos</a></li>
-                    <li><a href="solicitudes.html">Solicitudes</a></li>
-                    <li><a href="chatbot.html">ChatBot</a></li>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Puntos</a></li>
+                    <li><a href="#">Solicitudes</a></li>
+                    <li><a href="#">ChatBot</a></li>
                 </ul>
             </nav>
         </header>
@@ -32,21 +32,11 @@
 
             <!-- Formulario de donación -->
             <form class="donation-form" onsubmit="showPopup(event)">
-                <label for="blood-type">Tipo de Sangre</label>
-                <select id="blood-type" required>
-                    <option value="">Seleccione...</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                </select>
-
                 <label for="quantity">Cantidad Donada (ml)</label>
-                <input type="number" id="quantity" required min="1" placeholder="Ingrese la cantidad en ml">
+                <input type="number" id="quantity" required min="100" max="500" placeholder="Ingrese la cantidad en ml">
+                
+                <label for="donation-date">Fecha de la Donación</label>
+                <input type="date" id="donation-date" required>
 
                 <button type="submit">Registrar Donación</button>
             </form>

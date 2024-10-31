@@ -33,19 +33,19 @@
                 <div class="blood-type">SANGRE: {{ user_data['tipo_de_sangre'] }}</div>
                 <div class="request-now">
                     <img src="{{ user_data['perfil_imagen_link'] }}" referrerpolicy="no-referrer" alt="Profile Picture" class="profile-picture">
-                    <button onclick="redirectToView()" class="request-button">Solicitar Sangre</button>
+                    <button onclick="solicitar_donacion_ruta()" class="request-button">Solicitar Sangre</button>
                 </div>
             </section>
             <section class="stats">
                 <a href="#" class="stat points-link">
                     <div>
                         <h4>Puntos</h4>
-                        <p>0</p>
+                        <p>{{ user_data['puntos'] }}</p>
                     </div>
                 </a>
                 <div class="stat">
                     <h4>Donado</h4>
-                    <p>450 ml</p>
+                    <p>{{ user_data['total_donado'] }} ml</p>
                 </div>
 
                 <div class="stat">
@@ -68,10 +68,10 @@
     </div>
 
     <script>
-        function redirectToView() {
-            window.location.href = 'solicitud_donacion.html'; // Cambia 'tu-vista.html' por la URL a la que quieras redirigir
+        function solicitar_donacion_ruta() {
+            window.location.href = 'solicitud_donacion'; // Cambia la URL a la que quieras redirigir
         }
-        </script>
+    </script>
 
 </body>
 </html>
