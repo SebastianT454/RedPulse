@@ -52,12 +52,13 @@ def insertarEnTabla( usuario ):
         # Todas las instrucciones se ejecutan a tavés de un cursor
         cursor.execute(f"""
         insert into usuarios (
-            nombre, contrasena, correo, numero_documento, donante, admin, enfermero, tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash
+            nombre, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash
         )
         values 
         (
             '{usuario.nombre}',  '{usuario.contrasena}', '{usuario.correo}', '{usuario.numero_documento}', '{usuario.donante}', '{usuario.admin}', '{usuario.enfermero}', 
-            '{usuario.tipo_de_sangre}', '{usuario.tipo_documento}', '{usuario.perfil_imagen_link}', '{usuario.perfil_imagen_deletehash}'
+            '{usuario.puntos}', '{usuario.total_donado}', '{usuario.tipo_de_sangre}', '{usuario.tipo_documento}', '{usuario.perfil_imagen_link}', 
+            '{usuario.perfil_imagen_deletehash}'
         );
                        """)
 
@@ -81,7 +82,7 @@ def obtenerUsuarioPorDocumento( numero_documento, tipo_documento ):
     if row is None:
         raise ErrorNotFound("El usuario buscado, no fue encontrado. Numero documento y tipo de documento: ", numero_documento, tipo_documento)
 
-    result = Usuario( row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10] )
+    result = Usuario( row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12] )
     return result
 
 def verificarExistenciaUsuario( numero_documento, tipo_documento ):

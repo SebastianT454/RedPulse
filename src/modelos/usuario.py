@@ -18,8 +18,9 @@ class TipoSangre(Enum):
 
 class Usuario:
     def __init__(self, nombre: str, contrasena: str, correo: str, numero_documento: str, 
-                 donante: bool, admin: bool, enfermero: bool, tipo_de_sangre: TipoSangre,
-                 tipo_documento: TipoDocumento, perfil_imagen_link: str, perfil_imagen_deletehash: str):
+                donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
+                tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
+                perfil_imagen_deletehash: str):
         self.nombre = nombre
         self.contrasena = contrasena
         self.correo = correo
@@ -27,6 +28,8 @@ class Usuario:
         self.donante = donante
         self.admin = admin
         self.enfermero = enfermero
+        self.puntos = puntos
+        self.total_donado = total_donado
         self.tipo_de_sangre = tipo_de_sangre
         self.tipo_documento = tipo_documento
         self.perfil_imagen_link = perfil_imagen_link

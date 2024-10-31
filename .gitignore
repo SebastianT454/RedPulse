@@ -1,5 +1,6 @@
 # Modulo de datos secretos, nunca debe subirse al repo
 src/secret_config.py
+src/__pycache__/secret_config.cpython-312.pyc:5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

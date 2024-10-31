@@ -17,15 +17,15 @@ class TipoSangre(Enum):
     O_NEG = "O-"
 
 class Registro:
-    def __init__(self, id: int, tipo_registro: TipoRegistro, 
-                 tipo_sangre: TipoSangre, cantidad: float, 
-                 razon: str, comentarios: str, 
-                 documento_usuario: str, prioridad: int):
-        self.id = id
+    def __init__(self, id_registro: int, tipo_registro: TipoRegistro, tipo_sangre: TipoSangre, cantidad: int, 
+                 razon: str, comentarios: str, prioridad: int, fecha: str, usuario_documento: str, usuario_tipo_documento: str):
+        self.id = id_registro
         self.tipo_registro = tipo_registro
         self.tipo_sangre = tipo_sangre
         self.cantidad = cantidad
         self.razon = razon
         self.comentarios = comentarios
-        self.documento_usuario = documento_usuario
         self.prioridad = prioridad  # está entre 1 y 5 como el TRIAGE
+        self.fecha = fecha
+        self.usuario_documento = usuario_documento
+        self.usuario_tipo_documento = usuario_tipo_documento

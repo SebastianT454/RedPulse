@@ -111,6 +111,14 @@ body {
     background-color: #A3312D;
 }
 
+.donation-form input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 /* Modal de éxito/error */
 #message-popup {
     display: none;
