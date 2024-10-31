@@ -13,6 +13,15 @@ NOTICONTRA = "redpulse.123"
 
 SECRET_KEY_FLASK = "j98h3y2qweRTY8uiopASDFGHJKLZXCVBNM,./1234567890-=`~!@#$%^&*()_+[]{}|;:?><"
 
+# Key para la conexion con ChatGpt
 CHAT_BOT_KEY = "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"
 
+# Correo por defecto del administrador
 ADMINEMAIL = "redpulsetst@gmail.com"
+
+# Imagen de perfil por defecto para cada usuario
+DEFAULT_PROFILE_PICTURE = "https://i.pinimg.com/474x/65/25/a0/6525a08f1df98a2e3a545fe2ace4be47.jpg"
+
+# Keys para Imgur
+IMGUR_CLIENT_ID = "a16e9e8cb650a1b"
+IMGUR_CLIENT_SECRET = "dcd1c09918ebcc679c8516672f317ff6c82a8ece"
