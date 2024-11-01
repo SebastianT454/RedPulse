@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedPulse - ChatBot</title>
-    <link rel="stylesheet" href="stylesChatbot.css">
+    <link rel="stylesheet" href="/css/stylesChatbot.css">
 </head>
 <body>
     <!-- Encabezado RedPulse -->
     <header class="header">
-        <a href="home.html" class="no-underline">
+        <a href="{{ url_for('perfil') }}" class="no-underline">
             <h1><span class="red">Red</span><span class="pulse">Pulse</span><span class="dot">●</span></h1>
         </a>
     </header>
@@ -43,19 +43,34 @@
                 // Limpiar el campo de entrada
                 userInput.value = '';
 
-                // Simular respuesta del chatbot
-                setTimeout(() => {
+                // Crear un objeto con los datos a enviar
+                const data = { mensaje_ingresado: message };
+        
+                // Hacer la petición POST
+                fetch('/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json()) // Esperar la respuesta y convertirla a JSON
+                .then(result => {
+                    // Agregar respuesta del chatbot
                     const botMessage = document.createElement('div');
                     botMessage.classList.add('message', 'bot-message');
-                    botMessage.textContent = "Estoy procesando tu solicitud...";
+                    botMessage.textContent = result.respuesta;
                     chatWindow.appendChild(botMessage);
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }, 1000);
 
-                // Desplazar al final del chat
-                chatWindow.scrollTop = chatWindow.scrollHeight;
+                    // Desplazar al final del chat
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error al procesar la solicitud:', error);
+                });
             }
         }
+
     </script>
 </body>
 </html>

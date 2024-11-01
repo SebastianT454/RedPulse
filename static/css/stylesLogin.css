@@ -13,6 +13,14 @@ body {
     align-items: center;
 }
 
+.header .red {
+    color: #000000;
+}
+
+.header .pulse {
+    color: #B93A32;
+}
+
 .modal {
     background-color: white;
     border-radius: 10px;

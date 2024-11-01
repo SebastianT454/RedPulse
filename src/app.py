@@ -9,15 +9,16 @@ from datetime import datetime
 from controladores.aunteticacion_controlador import *
 
 # Controlador para el registro
-
 from controladores.registro_controlador import *
+
+# Controlador de puntos
+from controladores.puntos_controlador import *
 
 # Base de datos, chatbot.
 from servicios.usuario_bd_servicio import *
 from servicios.chatbot_servicio import *
 
 # Importar el servicio de sesiones construido.
-
 from servicios.sesion_servicio import *
 
 # app principal del Flask
@@ -75,7 +76,7 @@ def login():
             usuario = obtenerUsuarioPorDocumento(numero_documento, tipo_documento)
 
             # Guardar los datos en la sesión
-            session['user_data'] = generar_usuario_sesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
+            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
                                                           usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
                                                           usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
 
@@ -107,7 +108,7 @@ def registro():
         nombre_completo = nombre + ' ' + apellido
 
         # Enviar la imagen a Imgur y guardarla.
-        perfil_imagen_link, perfil_imagen_deletehash = generar_usuario_imagen(imagen, imgur_handler)
+        perfil_imagen_link, perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
 
         # Verificar si la cuenta ya existe
         exists = verificarExistenciaUsuario(numero_documento, tipo_documento)
@@ -121,7 +122,7 @@ def registro():
                              tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
 
             # Guardar los datos en la sesión
-            session['user_data'] = generar_usuario_sesion(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado,
+            session['user_data'] = generarUsuarioSesion(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado,
                                                            tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
         
     return render_template('registro.html')
@@ -146,20 +147,51 @@ def perfil():
     if not user_data:
        return redirect(url_for('home'))
     
-    # Reiniciar la sesion de registro_creado si existe una vez que este en el perfil
-    registro_creado = session['registro_creado']
+    """
+    # Reiniciar la sesion de registro_creado o puntos_procesados si existe una vez que este en el perfil
+    registro_creado = session.get('registro_creado')
 
     if registro_creado:
         session['registro_creado'] = None
-
+    """
+    
     return render_template('perfil.html', user_data=user_data)
 
-@app.route('/chatbot', methods=['POST'])
+@app.route('/puntos', methods=['GET', 'POST'])
+def puntos():
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+
+    # Verificar si ya hay datos de usuario en la sesión
+    if not user_data:
+       return redirect(url_for('home'))
+    
+    # Obtener los puntos seleccionados
+    if request.method == 'POST':
+        data = request.get_json()  # Obtener los datos JSON enviados
+        puntos_seleccionados = int(data.get('puntos_seleccionados'))  # Acceder a los puntos seleccionados especificamente
+
+        puntos_procesados = procesarPuntos(puntos_seleccionados)
+        return jsonify(success=puntos_procesados, nuevos_puntos=obtenerValorUsuarioSesion('puntos'))
+
+    return render_template('puntos.html', user_data=user_data)
+
+@app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
-    data = request.get_json()
-    user_message = data.get("message")
-    response_text = generate_response(user_message)
-    return jsonify({"response": response_text})
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+
+    # Verificar si ya hay datos de usuario en la sesión
+    if not user_data:
+       return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        data = request.get_json()
+        usuario_mensaje_ingresado = data.get("mensaje_ingresado")
+        respuesta = generate_response(usuario_mensaje_ingresado)
+        return jsonify(respuesta=respuesta)
+    
+    return render_template('chatBot.html')
 
 @app.route('/solicitud_donacion', methods=['GET', 'POST'])
 def solicitud_donacion():
