@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <a href="#" class="no-underline">
+            <a href="{{ url_for('home') }}" class="no-underline">
                 <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
             </a>
             <nav>
@@ -85,6 +85,7 @@
         function submitForm() {
             document.getElementById('success-message').style.display = 'none';
         }
+
     </script> 
 </body>
 </html>

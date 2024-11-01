@@ -3,11 +3,14 @@ import secret_config
 # Usuario.
 from modelos.usuario import *
 
+# Importando session
+from flask import session
+
 # Importando la imagen por defecto del usuario.
 
 url = secret_config.DEFAULT_PROFILE_PICTURE
 
-def generar_usuario_sesion(nombre_completo: str, contrasena: str, correo: str, numero_documento: str, 
+def generarUsuarioSesion(nombre_completo: str, contrasena: str, correo: str, numero_documento: str, 
                 donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
                 perfil_imagen_deletehash: str):
@@ -27,8 +30,7 @@ def generar_usuario_sesion(nombre_completo: str, contrasena: str, correo: str, n
         'perfil_imagen_deletehash': perfil_imagen_deletehash
         }
 
-
-def generar_usuario_imagen(imagen, imgur_handler):
+def generarUsuarioImagen(imagen, imgur_handler):
     if imagen and imagen.filename:
         image_data = imgur_handler.send_image(imagen)
 
@@ -44,3 +46,11 @@ def generar_usuario_imagen(imagen, imgur_handler):
          
     return secret_config.DEFAULT_PROFILE_PICTURE, ""
 
+def actualizarUsuarioSesion(clave, nuevo_valor):
+    user_data = session.get('user_data')
+    user_data[clave] = nuevo_valor
+    session['user_data'] = user_data
+
+def obtenerValorUsuarioSesion(clave):
+    user_data = session.get('user_data')
+    return user_data[clave]

@@ -107,14 +107,15 @@ def actualizarEstadoDonante( numero_documento, tipo_documento ):
         raise Exception("No fue posible actualizar el estado de donante para el usuario con el numero de documento: " + str(numero_documento)) from e
 
 
-def agregarPuntos( numero_documento, tipo_documento, cantidad_puntos ):
+def actualizarPuntos( numero_documento, tipo_documento, cantidad_puntos ):
     """ Agrega una cantidad de puntos al usuario especificado """
     
     cursor = obtenerCursor()
     try:
-        sql = f"UPDATE usuarios SET puntos = puntos + {cantidad_puntos} WHERE numero_documento = '{numero_documento}' AND tipo_documento = '{tipo_documento}'"
+        sql = f"UPDATE usuarios SET puntos = {cantidad_puntos} WHERE numero_documento = '{numero_documento}' AND tipo_documento = '{tipo_documento}'"
         cursor.execute(sql)
         cursor.connection.commit()
     except Exception as e:
         cursor.connection.rollback()
         raise Exception("No fue posible agregar puntos al usuario con el numero de documento: " + str(numero_documento)) from e
+    
