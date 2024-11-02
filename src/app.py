@@ -1,9 +1,11 @@
 #////////////////////////////// Importaciones //////////////////////////////////////////////
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from servicios.flask_imgur_servicio import *
 
+#Imgur
+from servicios.Misc.flask_imgur_servicio import *
+
+#Misc
 import os
-from datetime import datetime
 
 # Controlador para el login y registro
 from controladores.aunteticacion_controlador import *
@@ -15,11 +17,14 @@ from controladores.registro_controlador import *
 from controladores.puntos_controlador import *
 
 # Base de datos, chatbot.
-from servicios.usuario_bd_servicio import *
+from servicios.BaseDeDatos.usuario_bd_servicio import *
 from servicios.chatbot_servicio import *
 
 # Importar el servicio de sesiones construido.
 from servicios.sesion_servicio import *
+
+# Importar el servicio de donaciones.
+from servicios.donacion_servicio import *
 
 # app principal del Flask
 app = Flask(__name__,
@@ -27,14 +32,27 @@ app = Flask(__name__,
             static_folder= os.path.join(os.path.pardir, 'static'),
             template_folder= os.path.join(os.path.pardir, 'templates'))
 
+# Secreto para el App de Flask
+app.secret_key = secret_config.SECRET_KEY_FLASK
+
 # Imgur client id para la API
 app.config["IMGUR_ID"] = secret_config.IMGUR_CLIENT_ID
 imgur_handler = Imgur(app)
 
-# Secreto para el App de Flask
-app.secret_key = secret_config.SECRET_KEY_FLASK
-
 #////////////////////////////// Rutas //////////////////////////////////////////////
+
+@app.route('/estadisticas')
+def estadisticas():
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+    
+    # Verificar si el usuario ha iniciado sesión
+    if not user_data and user_data.get('admin'):
+        return render_template('home.html')
+
+    return render_template('estadisticas.html')
+
+# Home, Logout y retorno al home
 
 @app.route('/')
 def home():
@@ -47,85 +65,12 @@ def home():
 
     # Verificar si es admin o enfermero y renderizar el template adecuado
     if user_data.get('admin'):
-        return render_template('admin.html', user_data=user_data)
+        return redirect(url_for('estadisticas'))
     elif user_data.get('enfermero'):
-        return render_template('enfermero.html', user_data=user_data)
+        return redirect(url_for('enfermero'))
     else:
         # Se renderiza el home para cada uno.
         return render_template('home.html', user_data=user_data)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    # Verificar si ya hay datos de usuario en la sesión
-    if 'user_data' in session:
-        return redirect(url_for('home'))
-    
-    if request.method == 'POST':
-        # Obtener datos del formulario
-        numero_documento = request.form.get('numero_documento')
-        tipo_documento = request.form.get('tipo_documento')
-        contrasena = request.form.get('contrasena')
-
-        # Verificar si la cuenta existe y su numero de documento y contraseña son validos.
-        exists = verificacionLogin(numero_documento, tipo_documento, contrasena)
-
-        # Almacenar el resultado de la verificación en la sesión
-        session['login_verificacion_resultado'] = exists
-
-        if exists:
-            usuario = obtenerUsuarioPorDocumento(numero_documento, tipo_documento)
-
-            # Guardar los datos en la sesión
-            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
-                                                          usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
-                                                          usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
-
-    return render_template('login.html')
-
-@app.route('/registro', methods=['GET', 'POST'])
-def registro():
-    # Verificar si ya hay datos de usuario en la sesión
-    if 'user_data' in session:
-        return redirect(url_for('home'))
-    
-    if request.method == 'POST':
-        # Obtener datos del formulario
-        nombre = request.form.get('nombre')
-        apellido = request.form.get('apellido')
-        contrasena = request.form.get('contrasena')
-        correo = request.form.get('correo')
-        numero_documento = request.form.get('numero_documento')
-        donante = False
-        admin = False
-        enfermero = False
-        puntos = 0
-        total_donado = 0
-        tipo_de_sangre = request.form.get('tipo_de_sangre')
-        tipo_documento = request.form.get('tipo_documento')
-        imagen = request.files.get('perfil_imagen')
-
-        # Definir el nombre completo.
-        nombre_completo = nombre + ' ' + apellido
-
-        # Enviar la imagen a Imgur y guardarla.
-        perfil_imagen_link, perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
-
-        # Verificar si la cuenta ya existe
-        exists = verificarExistenciaUsuario(numero_documento, tipo_documento)
-
-        # Almacenar el resultado de la verificación en la sesión
-        session['registarse_verificacion_resultado'] = exists
-
-        # Crear el usuario en el sistema.
-        if not exists:
-            registrarUsuario(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, 
-                             tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
-
-            # Guardar los datos en la sesión
-            session['user_data'] = generarUsuarioSesion(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado,
-                                                           tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
-        
-    return render_template('registro.html')
 
 @app.route('/logout')
 def logout():
@@ -133,10 +78,12 @@ def logout():
     return redirect(url_for('home'))
 
 @app.route('/return_home')
-def close_login():
+def return_home():
     session['registarse_verificacion_resultado'] = None
     session['login_verificacion_resultado'] = None
     return redirect(url_for('home'))
+
+# Rutas de acceso para un usuario registrado
 
 @app.route('/perfil')
 def perfil():
@@ -146,14 +93,6 @@ def perfil():
     # Verificar si ya hay datos de usuario en la sesión
     if not user_data:
        return redirect(url_for('home'))
-    
-    """
-    # Reiniciar la sesion de registro_creado o puntos_procesados si existe una vez que este en el perfil
-    registro_creado = session.get('registro_creado')
-
-    if registro_creado:
-        session['registro_creado'] = None
-    """
     
     return render_template('perfil.html', user_data=user_data)
 
@@ -203,25 +142,136 @@ def solicitud_donacion():
        return redirect(url_for('home'))
     
     if request.method == 'POST':
-        # Obtener datos del formulario y algunos del usuario
-        tipo_registro = 'Solicitud'
-        tipo_sangre = user_data['tipo_de_sangre']
-        cantidad = request.form.get('cantidad_sangre_donada')
-        razon = request.form.get('razon')
-        comentarios = request.form.get('comentarios')
-        prioridad = request.form.get('prioridad_solicitud')
-        fecha = datetime.now().strftime("%Y-%m-%d")
-        usuario_documento = user_data['numero_documento']
-        usuario_tipo_documento = user_data['tipo_documento']
-
         # Crear el registro en el sistema.
-        registro_creado = crearRegistro(None, tipo_registro, tipo_sangre, cantidad, razon, comentarios, prioridad, fecha, usuario_documento, usuario_tipo_documento)
+        registro = crearRegistro(request, user_data)
 
         # Almacenar el resultado de la operacion
-        session['registro_creado'] = registro_creado
-
+        session['registro_creado'] = registro
 
     return render_template('solicitud_donacion.html', user_data=user_data)
+
+# Rutas para el enfermero
+
+@app.route('/enfermero', methods=['GET', 'POST'])
+def enfermero():
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+    
+    # Verificar si el usuario ha iniciado sesión
+    if not user_data and user_data.get('enfermero'):
+        return render_template('home.html')
+
+    if request.method == 'POST':
+        cedula_ingresada = request.form.get('cedula')
+        tipo_de_cedula_ingresada = request.form.get('tipo_documento')
+
+        # Verificar si la cuenta ya existe
+        exists = verificarExistenciaUsuario(cedula_ingresada, tipo_de_cedula_ingresada)
+
+        # Almacenar el resultado de la verificación en la sesión
+        session['enfermero_usuario_verificacion'] = exists
+
+        # Limpiar las sesiones para repetir el proceso
+        if 'enfermero_usuario_obtenido' in session:
+            session['enfermero_usuario_obtenido'] = None
+
+        if 'donacion_exitosa' in session:
+            session['donacion_exitosa'] = None
+
+        if exists:
+            session['enfermero_usuario_obtenido'] = {
+                'cedula_usuario': cedula_ingresada,
+                'tipo_cedula_usuario': tipo_de_cedula_ingresada
+            }
+        
+    return render_template('enfermero.html')
+    
+@app.route('/agregar_donacion', methods=['GET', 'POST'])
+def agregar_donacion():
+    # Obtener datos del usuario de la sesion y el usuario obtenido
+    user_data = session.get('user_data')
+    user_obtained_data = session.get('enfermero_usuario_obtenido')
+    
+    # Verificar si el usuario ha iniciado sesión
+    if not user_data and user_data.get('enfermero'):
+        return render_template('home.html')
+
+    session['enfermero_usuario_verificacion'] = None
+
+    if request.method == 'POST':
+        cantidad_sangre_donada = int(request.form.get('cantidad_donada'))
+        fecha_donacion = request.form.get('fecha_donacion')
+        numero_documento = user_obtained_data['cedula_usuario']
+        tipo_documento = user_obtained_data['tipo_cedula_usuario']
+
+        donacion_exitosa = insertarDonacion(numero_documento, tipo_documento, fecha_donacion, cantidad_sangre_donada)
+        session['donacion_exitosa'] = donacion_exitosa
+
+    return render_template('agregar_donacion.html')
+
+# Ruta de login y registro.
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # Verificar si ya hay datos de usuario en la sesión
+    if 'user_data' in session:
+        return redirect(url_for('home'))
+    
+    if request.method == 'POST':
+        # Obtener datos del formulario
+        numero_documento = request.form.get('numero_documento')
+        tipo_documento = request.form.get('tipo_documento')
+        contrasena = request.form.get('contrasena')
+
+        # Verificar si la cuenta existe y su numero de documento y contraseña son validos.
+        exists = verificacionLogin(numero_documento, tipo_documento, contrasena)
+
+        # Almacenar el resultado de la verificación en la sesión
+        session['login_verificacion_resultado'] = exists
+
+        if exists:
+            usuario = obtenerUsuarioPorDocumento(numero_documento, tipo_documento)
+
+            # Guardar los datos en la sesión
+            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
+                                                        usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
+                                                        usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
+
+    return render_template('login.html')
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    # Verificar si ya hay datos de usuario en la sesión
+    if 'user_data' in session:
+        return redirect(url_for('home'))
+    
+    if request.method == 'POST':
+        # Obtener datos del formulario
+        usuario = obtenerValoresRegistro(request)
+
+        # Verificar si la cuenta ya existe
+        exists = verificarExistenciaUsuario(usuario.numero_documento, usuario.tipo_documento)
+
+        # Almacenar el resultado de la verificación en la sesión
+        session['registarse_verificacion_resultado'] = exists
+
+        # Crear el usuario en el sistema.
+        if not exists:
+            # Enviar la imagen a Imgur y guardarla.
+            imagen = request.files.get('perfil_imagen')
+            usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
+
+            registrarUsuario(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
+                             usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
+                             usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
+
+            # Guardar los datos en la sesión
+            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
+                                                        usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
+                                                        usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
+        
+    return render_template('registro.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

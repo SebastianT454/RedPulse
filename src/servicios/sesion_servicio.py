@@ -10,6 +10,17 @@ from flask import session
 
 url = secret_config.DEFAULT_PROFILE_PICTURE
 
+# Funciones
+
+def actualizarUsuarioSesion(clave, nuevo_valor):
+    user_data = session.get('user_data')
+    user_data[clave] = nuevo_valor
+    session['user_data'] = user_data
+
+def obtenerValorUsuarioSesion(clave):
+    user_data = session.get('user_data')
+    return user_data[clave]
+
 def generarUsuarioSesion(nombre_completo: str, contrasena: str, correo: str, numero_documento: str, 
                 donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
@@ -46,11 +57,22 @@ def generarUsuarioImagen(imagen, imgur_handler):
          
     return secret_config.DEFAULT_PROFILE_PICTURE, ""
 
-def actualizarUsuarioSesion(clave, nuevo_valor):
-    user_data = session.get('user_data')
-    user_data[clave] = nuevo_valor
-    session['user_data'] = user_data
+def obtenerValoresRegistro(request):
+    nombre = request.form.get('nombre')
+    apellido = request.form.get('apellido')
+    contrasena = request.form.get('contrasena')
+    correo = request.form.get('correo')
+    numero_documento = request.form.get('numero_documento')
+    donante = False
+    admin = False
+    enfermero = False
+    puntos = 0
+    total_donado = 0
+    tipo_de_sangre = request.form.get('tipo_de_sangre')
+    tipo_documento = request.form.get('tipo_documento')
 
-def obtenerValorUsuarioSesion(clave):
-    user_data = session.get('user_data')
-    return user_data[clave]
+    # Definir el nombre completo.
+    nombre_completo = nombre + ' ' + apellido
+
+    return Usuario(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, None, None)
+

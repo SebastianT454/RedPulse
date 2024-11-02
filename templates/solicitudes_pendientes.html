@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedPulse - Solicitudes de Donación </title>
+    <link rel="stylesheet" href="/css/stylesSolicitudesPendientes.css">
+    
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a class="no-underline">
+                <h1><span class="red">Red</span><span class="pulse">Pulse</span></h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#">Estadisticas</a></li>
+                    <li><a href="#">Cerrar sesión</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="main-content">
+
+            <section class="donations-list">
+                <h2>Solicitudes de Donación Pendientes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donante</th>
+                            <th>Tipo de Sangre</th>
+                            <th>Cantidad (ml)</th>
+                            <th>Fecha</th>
+                            <th>Razon</th>
+                            <th>Prioridad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Juan Pérez</td>
+                            <td>A+</td>
+                            <td>500</td>
+                            <td>2024-10-26</td>
+                            <td><button class="reason-button">Razon</button></td>
+                            <td>5</td>
+                            <td>
+                                <button class="approve-button">Aprobar</button>
+                                <button class="reject-button">Rechazar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>María López</td>
+                            <td>O-</td>
+                            <td>450</td>
+                            <td>2024-10-28</td>
+                            <td><button class="reason-button">Razon</button></td>
+                            <td>3</td>
+                            <td>
+                                <button class="approve-button">Aprobar</button>
+                                <button class="reject-button">Rechazar</button>
+                            </td>
+                        </tr>
+                        <!-- Agregar más filas según sea necesario -->
+                    </tbody>
+                </table>
+                
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

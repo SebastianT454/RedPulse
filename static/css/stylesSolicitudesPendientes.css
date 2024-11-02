@@ -77,21 +77,6 @@ h2 {
     margin-bottom: 15px;
 }
 
-.charts {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.chart-container {
-    flex: 1;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .donations-list {
     margin-top: 20px;
 }
@@ -114,7 +99,7 @@ h2 {
     font-weight: bold;
 }
 
-.approve-button, .reject-button {
+.approve-button, .reject-button, .reason-button{
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -128,7 +113,7 @@ h2 {
     background-color: #4CAF50;
 }
 
-.reject-button {
+.reject-button, .reason-button {
     background-color: #c36b65;
 }
 

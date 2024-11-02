@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # check_password_hash: comprueba si un valor cifrado concuerda con su valor original.
 
 # Base de datos.
-from servicios.usuario_bd_servicio import *
+from servicios.BaseDeDatos.usuario_bd_servicio import *
 
 # Usuario.
 from modelos.usuario import *
