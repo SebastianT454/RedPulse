@@ -4,6 +4,11 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 #Imgur
 from servicios.Misc.flask_imgur_servicio import *
 
+#otros
+import secrets
+from redis import StrictRedis
+from datetime import timedelta
+
 #Misc
 import os
 
@@ -24,6 +29,10 @@ from servicios.sesion_servicio import *
 # Importar el servicio de donaciones.
 from servicios.registro_servicio import *
 
+#email
+from servicios.notificaciones_servicio import *
+email = Notificaciones()
+
 # app principal del Flask
 app = Flask(__name__,
             static_url_path='', 
@@ -36,6 +45,8 @@ app.secret_key = secret_config.SECRET_KEY_FLASK
 # Imgur client id para la API
 app.config["IMGUR_ID"] = secret_config.IMGUR_CLIENT_ID
 imgur_handler = Imgur(app)
+
+redis_client = StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 #////////////////////////////// Rutas //////////////////////////////////////////////
 
@@ -301,6 +312,55 @@ def registro():
         
     return render_template('registro.html')
 
+# Ruta para solicitar recuperación de contraseña y recuperacion de contraseña
+def guardarTokenRecuperacion(email, token, expiracion_minutos=30):
+    redis_client.setex(f"recuperacion:{email}", timedelta(minutes=expiracion_minutos), token)
+
+def obtenerTokenRecuperacion(email):
+    return redis_client.get(f"recuperacion:{email}")
+
+def eliminarTokenRecuperacion(email):
+    redis_client.delete(f"recuperacion:{email}")
+
+@app.route('/solicitar_recuperacion', methods=['POST'])
+def solicitar_recuperacion():
+    data = request.get_json()
+    email = data.get('email')
+
+    # Verificar si el correo está registrado
+    if not verificarCorreo(email):
+        return render_template('solicitar_recuperacion')
+
+    # Generar token único para la recuperación de contraseña
+    token = secrets.token_hex(16)
+    
+    # Guardar el token en Redis con expiración
+    guardarTokenRecuperacion(email, token)
+
+    # Enviar notificación por correo con el enlace de recuperación
+    email.enviar_email_restauracion(email, token)
+    
+    return render_template('solicitar_recuperacion')
+
+@app.route('/reestablecer-contraseña', methods=['POST'])
+def reestablecer_contraseña():
+    data = request.get_json()
+    email = data.get('email')
+    token = data.get('token')
+    nueva_contrasena = data.get('nueva_contrasena')
+
+    # Verificar si el token es válido
+    token_almacenado = obtenerTokenRecuperacion(email)
+    if not token_almacenado or token_almacenado != token:
+        return render_template('restablecer_contrasena')
+
+    # Actualizar la contraseña en la base de datos
+    actualizarContrasena(email, nueva_contrasena)
+    
+    # Eliminar el token de Redis después de su uso
+    eliminarTokenRecuperacion(email)
+    
+    return render_template('login')
 
 if __name__ == '__main__':
     app.run(debug=True)

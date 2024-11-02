@@ -3,6 +3,7 @@ from email.mime.text import MIMEText
 import smtplib
 from secret_config import NOTIEMAIL, NOTICONTRA, ADMINEMAIL
 
+
 class Notificaciones:
     def __init__(self,de_email=None, contra=None, admin_email=ADMINEMAIL):
         self.admin_email = admin_email
@@ -47,6 +48,14 @@ class Notificaciones:
         )
         self.enviar_notificacion(self.admin_email, asunto, mensaje)
 
-    def recuperar_contra_notificacion(self, para_email):
-         pass #correo para recuperar contraseña
+    def recuperar_contra_notificacion(self, para_email, token):
+        reset_url = f"http://tuservidor.com/reset-password?token={token}" #cambiar cuando tengamos el deploy
+        asunto = "Recuperación de Contraseña"
+        mensaje = (
+            f"Has solicitado restablecer tu contraseña. Para continuar, haz clic en el siguiente enlace:\n\n"
+            f"{reset_url}\n\n"
+            "Este enlace es válido solo por un tiempo limitado. Si no solicitaste este cambio, puedes ignorar este mensaje."
+        )
+        self.enviar_notificacion(para_email, asunto, mensaje)
+
          

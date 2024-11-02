@@ -71,3 +71,6 @@ def obtenerValoresUsuario(request):
     nombre_completo = nombre + ' ' + apellido
 
     return Usuario(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, None, None)
+
+def hash_contrasena(contrasena: str) -> str:
+    return generate_password_hash(contrasena, method='pbkdf2:sha256', salt_length=10)
