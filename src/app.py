@@ -10,21 +10,19 @@ import os
 # Controlador para el login y registro
 from controladores.aunteticacion_controlador import *
 
-# Controlador para el registro
-from controladores.registro_controlador import *
-
 # Controlador de puntos
 from controladores.puntos_controlador import *
 
 # Base de datos, chatbot.
 from servicios.BaseDeDatos.usuario_bd_servicio import *
+from servicios.BaseDeDatos.registro_bd_servicio import *
 from servicios.chatbot_servicio import *
 
 # Importar el servicio de sesiones construido.
 from servicios.sesion_servicio import *
 
 # Importar el servicio de donaciones.
-from servicios.donacion_servicio import *
+from servicios.registro_servicio import *
 
 # app principal del Flask
 app = Flask(__name__,
@@ -40,17 +38,6 @@ app.config["IMGUR_ID"] = secret_config.IMGUR_CLIENT_ID
 imgur_handler = Imgur(app)
 
 #////////////////////////////// Rutas //////////////////////////////////////////////
-
-@app.route('/estadisticas')
-def estadisticas():
-    # Obtener datos del usuario desde la sesión
-    user_data = session.get('user_data')
-    
-    # Verificar si el usuario ha iniciado sesión
-    if not user_data and user_data.get('admin'):
-        return render_template('home.html')
-
-    return render_template('estadisticas.html')
 
 # Home, Logout y retorno al home
 
@@ -150,6 +137,46 @@ def solicitud_donacion():
 
     return render_template('solicitud_donacion.html', user_data=user_data)
 
+# Rutas de administrador (estadisticas y solicitudes pendientes)
+
+@app.route('/solicitudes_pendientes', methods=['GET', 'POST'])
+def solicitudes_pendientes():
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+    
+    # Verificar si el usuario ha iniciado sesión, es admin y no es enfermero
+    if not user_data or not user_data.get('admin'):
+        return redirect(url_for('home'))
+    
+    # Obtener las solicitudes pendientes
+    solicitudes = obtenerSolicitudesPendientes()
+    
+    if request.method == 'POST':
+        data = request.get_json()
+        solicitud_id = data.get('id')
+        accion = data.get('accion')
+
+        actualizarEstadoRegistro(solicitud_id, accion)
+
+    return render_template('solicitudes_pendientes.html', solicitudes_pendientes=json.dumps(solicitudes))
+
+@app.route('/estadisticas')
+def estadisticas():
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+    
+    # Verificar si el usuario ha iniciado sesión
+    if not user_data or not user_data.get('admin'):
+        return redirect(url_for('home'))
+    
+    # Obtener datos de las estadisticas
+    donaciones_por_mes = obtener_donaciones_por_mes()
+    sangre_por_tipo = obtener_cantidad_sangre_por_tipo()
+
+    return render_template('estadisticas.html', 
+                           donaciones_por_mes=json.dumps(donaciones_por_mes), 
+                           sangre_por_tipo=json.dumps(sangre_por_tipo) )
+
 # Rutas para el enfermero
 
 @app.route('/enfermero', methods=['GET', 'POST'])
@@ -158,8 +185,9 @@ def enfermero():
     user_data = session.get('user_data')
     
     # Verificar si el usuario ha iniciado sesión
-    if not user_data and user_data.get('enfermero'):
-        return render_template('home.html')
+    if not user_data or not user_data.get('enfermero'):
+        if user_data.get('admin'):
+            return redirect(url_for('home'))
 
     if request.method == 'POST':
         cedula_ingresada = request.form.get('cedula')
@@ -193,8 +221,8 @@ def agregar_donacion():
     user_obtained_data = session.get('enfermero_usuario_obtenido')
     
     # Verificar si el usuario ha iniciado sesión
-    if not user_data and user_data.get('enfermero'):
-        return render_template('home.html')
+    if not user_data or not user_data.get('enfermero'):
+        return redirect(url_for('home'))
 
     session['enfermero_usuario_verificacion'] = None
 
@@ -247,16 +275,17 @@ def registro():
     
     if request.method == 'POST':
         # Obtener datos del formulario
-        usuario = obtenerValoresRegistro(request)
+        usuario = obtenerValoresUsuario(request)
 
         # Verificar si la cuenta ya existe
         exists = verificarExistenciaUsuario(usuario.numero_documento, usuario.tipo_documento)
+        correo_existe = verificarCorreo(usuario.correo)
 
         # Almacenar el resultado de la verificación en la sesión
         session['registarse_verificacion_resultado'] = exists
 
         # Crear el usuario en el sistema.
-        if not exists:
+        if not exists and not correo_existe:
             # Enviar la imagen a Imgur y guardarla.
             imagen = request.files.get('perfil_imagen')
             usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)

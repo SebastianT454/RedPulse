@@ -18,7 +18,7 @@ class TipoSangre(Enum):
 
 class Registro:
     def __init__(self, id_registro: int, tipo_registro: TipoRegistro, tipo_sangre: TipoSangre, cantidad: int, 
-                 razon: str, comentarios: str, prioridad: int, fecha: str, usuario_documento: str, usuario_tipo_documento: str):
+                 razon: str, comentarios: str, prioridad: int, estado: str, fecha: str, usuario_documento: str, usuario_tipo_documento: str):
         self.id = id_registro
         self.tipo_registro = tipo_registro
         self.tipo_sangre = tipo_sangre
@@ -26,6 +26,7 @@ class Registro:
         self.razon = razon
         self.comentarios = comentarios
         self.prioridad = prioridad  # está entre 1 y 5 como el TRIAGE
+        self.estado = estado
         self.fecha = fecha
         self.usuario_documento = usuario_documento
         self.usuario_tipo_documento = usuario_tipo_documento
