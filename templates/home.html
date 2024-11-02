@@ -13,7 +13,9 @@
         <div class="logo"><span class="red">Red</span><span class="pulse">Pulse</span></div>
         <ul>
             <li><a href="#">Nosotros</a></li>
+            {% if user_data %}
             <li><a href="{{ url_for('solicitud_donacion') }}">Solicitar Sangre</a></li>
+            {% endif %}
             <li><a href="{{ url_for('chatbot') }}">Preguntas Frecuentes</a></li>
         </ul>
         <!-- Verificamos si el usuario ya se registro o inicio sesion, para... -->
