@@ -115,13 +115,6 @@ def puntos():
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
-    # Obtener datos del usuario desde la sesión
-    user_data = session.get('user_data')
-
-    # Verificar si ya hay datos de usuario en la sesión
-    if not user_data:
-       return redirect(url_for('home'))
-
     if request.method == 'POST':
         data = request.get_json()
         usuario_mensaje_ingresado = data.get("mensaje_ingresado")
@@ -293,10 +286,13 @@ def registro():
         correo_existe = verificarCorreo(usuario.correo)
 
         # Almacenar el resultado de la verificación en la sesión
-        session['registarse_verificacion_resultado'] = exists
+        session['registarse_verificacion_resultado'] = True
 
         # Crear el usuario en el sistema.
         if not exists and not correo_existe:
+            # Almacenar el resultado de la verificación en la sesión
+            session['registarse_verificacion_resultado'] = False
+
             # Enviar la imagen a Imgur y guardarla.
             imagen = request.files.get('perfil_imagen')
             usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
