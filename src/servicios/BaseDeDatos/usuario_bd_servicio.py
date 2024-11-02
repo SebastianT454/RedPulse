@@ -96,6 +96,17 @@ def verificarExistenciaUsuario( numero_documento, tipo_documento ):
         return False
     return True
 
+def verificarCorreo( correo ):
+    """ Busca un usuario por el numero de documento y validamos si existe """
+
+    cursor = obtenerCursor()
+    cursor.execute(f"SELECT * from usuarios where CORREO = '{correo}' ")
+    row = cursor.fetchone()
+
+    if row is None:
+        return False
+    return True
+
 def actualizarEstadoDonante( numero_documento, tipo_documento ):
     cursor = obtenerCursor()
     try:

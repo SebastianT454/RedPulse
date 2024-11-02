@@ -52,3 +52,22 @@ def verificarUsuario(numero_documento: str, tipo_documento: TipoDocumento):
     if usuario_existe:
         return True
     return False
+
+def obtenerValoresUsuario(request):
+    nombre = request.form.get('nombre')
+    apellido = request.form.get('apellido')
+    contrasena = request.form.get('contrasena')
+    correo = request.form.get('correo')
+    numero_documento = request.form.get('numero_documento')
+    donante = False
+    admin = False
+    enfermero = False
+    puntos = 0
+    total_donado = 0
+    tipo_de_sangre = request.form.get('tipo_de_sangre')
+    tipo_documento = request.form.get('tipo_documento')
+
+    # Definir el nombre completo.
+    nombre_completo = nombre + ' ' + apellido
+
+    return Usuario(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, None, None)

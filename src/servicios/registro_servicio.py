@@ -1,7 +1,11 @@
 #////////////////////////////// Importaciones //////////////////////////////////////////////
+import sys
+sys.path.append("src")
+
 from servicios.BaseDeDatos.usuario_bd_servicio import obtenerUsuarioPorDocumento, actualizarEstadoDonante, actualizarPuntos
-from servicios.BaseDeDatos.registro_bd_servicio import insertarEnTabla as insertarRegistro
-from modelos.registro import Registro, TipoRegistro
+from servicios.BaseDeDatos.registro_bd_servicio import insertarEnTabla as insertarRegistro, actualizarEstadoRegistro
+from modelos.registro import Registro
+from datetime import datetime
 
 # Importando session
 from flask import session
@@ -21,6 +25,7 @@ def insertarDonacion(numero_documento, tipo_documento, fecha, cantidad_donada, t
             razon=None,
             comentarios=None,
             prioridad=None,
+            estado=None,
             fecha = fecha,
             usuario_documento=numero_documento,
             usuario_tipo_documento=tipo_documento
@@ -36,3 +41,25 @@ def insertarDonacion(numero_documento, tipo_documento, fecha, cantidad_donada, t
         print(f"Ocurrió un error al agregar la donación: {e}")
         return False
     
+# Obtener los datos del request HTTP y crear un registro
+def crearRegistro(request, user_data):
+    tipo_registro = 'Solicitud'
+    tipo_sangre = user_data['tipo_de_sangre']
+    cantidad = request.form.get('cantidad_sangre_donada')
+    razon = request.form.get('razon')
+    comentarios = request.form.get('comentarios')
+    prioridad = request.form.get('prioridad_solicitud')
+    estado = "Pendiente"
+    fecha = datetime.now().strftime("%Y-%m-%d")
+    usuario_documento = user_data['numero_documento']
+    usuario_tipo_documento = user_data['tipo_documento']
+
+    # Crear el registro.
+    registro = Registro(None, tipo_registro, tipo_sangre, cantidad, razon, comentarios, prioridad, estado, fecha, usuario_documento, usuario_tipo_documento)
+
+    try:
+        # Intentar insertar en la base de datos
+        insertarRegistro(registro)
+        return True 
+    except:
+        return False 

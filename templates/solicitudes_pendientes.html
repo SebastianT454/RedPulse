@@ -15,8 +15,8 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="#">Estadisticas</a></li>
-                    <li><a href="#">Cerrar sesión</a></li>
+                    <li><a href="{{ url_for('estadisticas') }}">Estadisticas</a></li>
+                    <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
                 </ul>
             </nav>
         </header>
@@ -38,37 +38,88 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Juan Pérez</td>
-                            <td>A+</td>
-                            <td>500</td>
-                            <td>2024-10-26</td>
-                            <td><button class="reason-button">Razon</button></td>
-                            <td>5</td>
-                            <td>
-                                <button class="approve-button">Aprobar</button>
-                                <button class="reject-button">Rechazar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>María López</td>
-                            <td>O-</td>
-                            <td>450</td>
-                            <td>2024-10-28</td>
-                            <td><button class="reason-button">Razon</button></td>
-                            <td>3</td>
-                            <td>
-                                <button class="approve-button">Aprobar</button>
-                                <button class="reject-button">Rechazar</button>
-                            </td>
-                        </tr>
-                        <!-- Agregar más filas según sea necesario -->
                     </tbody>
                 </table>
                 
             </section>
+            
         </main>
+
     </div>
+
+    <!-- Modal de mensaje -->
+    <div id="message-popup">
+        <div class="popup-content">
+            <h2>Razón de la Solicitud</h2>
+            <p id="razon-text"></p>
+            <button onclick="closePopup()">Cerrar</button>
+        </div>
+    </div>
+
+<script>
+
+// Convertir los datos de solicitudes que vienen desde Flask
+const solicitudes = JSON.parse('{{ solicitudes_pendientes | safe }}');
+
+// Llamada para crear filas de solicitudes
+document.addEventListener("DOMContentLoaded", function() {
+    crearFilasSolicitudes(solicitudes);
+});
+
+function crearFilasSolicitudes(solicitudes) {
+    const tbody = document.querySelector(".donations-list table tbody");
+    tbody.innerHTML = ""; // Limpiar filas anteriores si existían
+
+    solicitudes.forEach(solicitud => {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+            <td>${solicitud.nombreDonante}</td>
+            <td>${solicitud.tipoSangre}</td>
+            <td>${solicitud.cantidad}</td>
+            <td>${solicitud.fecha}</td>
+            <td><button class="reason-button" onclick="mostrarRazon('${solicitud.razon}')">Razón</button></td>
+            <td>${solicitud.prioridad}</td>
+            <td>
+                <button class="approve-button" onclick="procesarSolicitud(${solicitud.id}, 'Aprobado', this)">Aprobar</button>
+                <button class="reject-button" onclick="procesarSolicitud(${solicitud.id}, 'Denegado', this)">Rechazar</button>
+            </td>
+        `;
+
+        tbody.appendChild(fila);
+    });
+}
+
+// Funcion para actualizar el estado del registro
+function procesarSolicitud(id, accion, boton) {
+    // Crear un objeto con los datos a enviar
+    const data = { id: id, accion: accion };
+
+    // Enviar solicitud POST a Flask
+    fetch('/solicitudes_pendientes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(() => {
+        // Eliminar la fila de la tabla después de enviar la solicitud
+        const fila = boton.closest("tr");
+        fila.remove();
+    }).catch(error => console.error("Error al procesar la solicitud:", error));
+}
+
+// Funcion para mostrar el popup con la razón
+function mostrarRazon(razon) {
+    document.getElementById("razon-text").textContent = razon;
+    document.getElementById('message-popup').classList.add('active');
+}
+
+function closePopup() {
+    document.getElementById('message-popup').classList.remove('active');
+}
+
+</script>
 
 </body>
 </html>

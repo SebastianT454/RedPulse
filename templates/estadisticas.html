@@ -15,8 +15,8 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="#">Solicitudes de Donacion</a></li>
-                    <li><a href="#">Cerrar sesión</a></li>
+                    <li><a href="{{ url_for('solicitudes_pendientes') }}">Solicitudes de Donacion</a></li>
+                    <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
                 </ul>
             </nav>
         </header>
@@ -40,15 +40,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        // Datos obtenidos desde Flask (se convierten de JSON a objetos de JavaScript)
+        const donacionesPorMes = JSON.parse('{{ donaciones_por_mes | safe }}');
+        const sangrePorTipo = JSON.parse('{{ sangre_por_tipo | safe }}');
+
         // Gráfico de donaciones por mes
         const monthlyDonationsCtx = document.getElementById('monthlyDonationsChart').getContext('2d');
         const monthlyDonationsChart = new Chart(monthlyDonationsCtx, {
             type: 'bar',
             data: {
-                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                labels: Object.keys(donacionesPorMes),
                 datasets: [{
                     label: 'Donaciones',
-                    data: [20, 15, 30, 25, 20, 10, 18, 24, 22, 30, 28, 32], // Datos de ejemplo
+                    data: Object.values(donacionesPorMes),
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
@@ -69,10 +73,10 @@
         const bloodTypeChart = new Chart(bloodTypeCtx, {
             type: 'doughnut',
             data: {
-                labels: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                labels: Object.keys(sangrePorTipo),
                 datasets: [{
                     label: 'Cantidad de Sangre (ml)',
-                    data: [1500, 900, 1200, 800, 700, 500, 2500, 2000], // Datos de ejemplo
+                    data: Object.values(sangrePorTipo),
                     backgroundColor: [
                         '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#36A2EB'
                     ],
@@ -85,5 +89,6 @@
             }
         });
     </script>
+
 </body>
 </html>

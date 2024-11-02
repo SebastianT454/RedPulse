@@ -26,7 +26,7 @@ def generarUsuarioSesion(nombre_completo: str, contrasena: str, correo: str, num
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
                 perfil_imagen_deletehash: str):
     return {
-        'nombre_completo': nombre_completo,
+        'nombre': nombre_completo,
         'contrasena': contrasena,
         'correo': correo,
         'numero_documento': numero_documento,
@@ -56,23 +56,4 @@ def generarUsuarioImagen(imagen, imgur_handler):
         return perfil_imagen_link, perfil_imagen_deletehash
          
     return secret_config.DEFAULT_PROFILE_PICTURE, ""
-
-def obtenerValoresRegistro(request):
-    nombre = request.form.get('nombre')
-    apellido = request.form.get('apellido')
-    contrasena = request.form.get('contrasena')
-    correo = request.form.get('correo')
-    numero_documento = request.form.get('numero_documento')
-    donante = False
-    admin = False
-    enfermero = False
-    puntos = 0
-    total_donado = 0
-    tipo_de_sangre = request.form.get('tipo_de_sangre')
-    tipo_documento = request.form.get('tipo_documento')
-
-    # Definir el nombre completo.
-    nombre_completo = nombre + ' ' + apellido
-
-    return Usuario(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, None, None)
 
