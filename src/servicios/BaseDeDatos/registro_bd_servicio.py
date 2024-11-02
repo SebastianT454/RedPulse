@@ -50,16 +50,16 @@ def insertarEnTabla( registro ):
 
     try:
         # Todas las instrucciones se ejecutan a tavés de un cursor
-        cursor.execute(f"""
-        insert into registros (
+        cursor.execute("""
+        INSERT INTO registros (
             tipo_registro, tipo_sangre, cantidad, razon, comentarios, prioridad, fecha, usuario_documento, usuario_tipo_documento
         )
-        values 
-        (
-            '{registro.tipo_registro}',  '{registro.tipo_sangre}', '{registro.cantidad}', '{registro.razon}', '{registro.comentarios}', 
-            '{registro.prioridad}', '{registro.fecha}', '{registro.usuario_documento}', '{registro.usuario_tipo_documento}'
-        );
-                       """)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """, (
+            registro.tipo_registro, registro.tipo_sangre, registro.cantidad,
+            registro.razon, registro.comentarios, registro.prioridad,
+            registro.fecha, registro.usuario_documento, registro.usuario_tipo_documento
+        ))
 
         # Las instrucciones DDL y DML no retornan resultados, por eso no necesitan fetchall()
         # pero si necesitan commit() para hacer los cambios persistentes

@@ -2,7 +2,7 @@
 from servicios.sesion_servicio import actualizarUsuarioSesion
 
 # Importar el metodo para actualizar los puntos en la base de datos.
-from servicios.usuario_bd_servicio import actualizarPuntos
+from servicios.BaseDeDatos.usuario_bd_servicio import actualizarPuntos
 
 # Importando session
 from flask import session
