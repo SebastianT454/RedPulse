@@ -14,9 +14,9 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="{{ url_for('home') }}">Inicio</a></li>
                     <li><a href="{{ url_for('puntos') }}">Puntos</a></li>
                     <li><a href="{{ url_for('chatbot') }}">ChatBot</a></li>
+                    <li><a href="{{ url_for('movimientos') }}">Movimientos</a></li>
                     <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
                 </ul>
             </nav>
@@ -48,10 +48,12 @@
                     <p>{{ user_data['total_donado'] }} ml</p>
                 </div>
 
-                <div class="stat">
-                    <h4>Proxima Campaña</h4>
-                    <p>31/10/2024</p>
-                </div>
+                <a href="{{ url_for('movimientos') }}" class="stat historical-link">
+                    <div>
+                        <h4>Movimientos</h4>
+                        <p>{{ user_data['cnt_registros'] }}</p>
+                    </div>
+                </a>
 
             </section>
             

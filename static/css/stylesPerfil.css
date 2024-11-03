@@ -153,7 +153,7 @@ body {
     font-weight: bold;
 }
 
-.points-link {
+.points-link, .historical-link{
     text-decoration: none; /* Sin subrayado */
     color: inherit; /* Hereda el color del texto */
     background-color: #ffffff; /* Fondo blanco para el cuadro */
@@ -163,7 +163,7 @@ body {
     transition: background-color 0.3s; /* Transición suave para el color de fondo */
 }
 
-.points-link:hover {
+.points-link:hover, .historical-link:hover{
     background-color: #f8f8f8; /* Color de fondo al pasar el ratón */
 }
 

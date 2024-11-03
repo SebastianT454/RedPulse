@@ -2,13 +2,11 @@
 import sys
 sys.path.append("src")
 
-from servicios.BaseDeDatos.usuario_bd_servicio import obtenerUsuarioPorDocumento, actualizarEstadoDonante, actualizarPuntos
-from servicios.BaseDeDatos.registro_bd_servicio import insertarEnTabla as insertarRegistro, actualizarEstadoRegistro
+from servicios.BaseDeDatos.usuario_bd_servicio import obtenerUsuarioPorDocumento, actualizarEstadoDonante, actualizarPuntos, actualizarCantidadDonada
+from servicios.BaseDeDatos.registro_bd_servicio import insertarEnTabla as insertarRegistro
 from modelos.registro import Registro
 from datetime import datetime
 
-# Importando session
-from flask import session
 
 def insertarDonacion(numero_documento, tipo_documento, fecha, cantidad_donada, tipo_registro="Donacion"):
     try:
@@ -34,6 +32,7 @@ def insertarDonacion(numero_documento, tipo_documento, fecha, cantidad_donada, t
         insertarRegistro(nuevo_registro)
         
         actualizarPuntos(numero_documento, tipo_documento, usuario.puntos + 2000)
+        actualizarCantidadDonada(numero_documento, tipo_documento, usuario.total_donado + cantidad_donada)
 
         return True
 
