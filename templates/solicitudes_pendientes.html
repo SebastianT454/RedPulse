@@ -81,8 +81,8 @@ function crearFilasSolicitudes(solicitudes) {
             <td><button class="reason-button" onclick="mostrarRazon('${solicitud.razon}')">Razón</button></td>
             <td>${solicitud.prioridad}</td>
             <td>
-                <button class="approve-button" onclick="procesarSolicitud(${solicitud.id}, 'Aprobado', this)">Aprobar</button>
-                <button class="reject-button" onclick="procesarSolicitud(${solicitud.id}, 'Denegado', this)">Rechazar</button>
+                <button class="approve-button" onclick="procesarSolicitud(${solicitud.id}, 'Aprobado', '${solicitud.tipoSangre}', this)">Aprobar</button>
+                <button class="reject-button" onclick="procesarSolicitud(${solicitud.id}, 'Denegado', '${solicitud.tipoSangre}', this)">Rechazar</button>
             </td>
         `;
 
@@ -91,9 +91,9 @@ function crearFilasSolicitudes(solicitudes) {
 }
 
 // Funcion para actualizar el estado del registro
-function procesarSolicitud(id, accion, boton) {
+function procesarSolicitud(id, accion, tipo_sangre, boton) {
     // Crear un objeto con los datos a enviar
-    const data = { id: id, accion: accion };
+    const data = { id: id, accion: accion, tipo_sangre: tipo_sangre };
 
     // Enviar solicitud POST a Flask
     fetch('/solicitudes_pendientes', {

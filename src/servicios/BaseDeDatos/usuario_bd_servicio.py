@@ -179,3 +179,26 @@ def obtenerCorreoUsuario(usuario_documento, usuario_tipo_documento):
     res = cursor.fetchone()
     
     return res[0] if res else None
+
+def obtenerCorreosPorTipoSangre(tipo_sangre):
+    """Obtiene todos los correos de los usuarios con un tipo de sangre específico"""
+    
+    cursor = obtenerCursor()
+    try:
+        # Consulta SQL para seleccionar los correos de usuarios con el tipo de sangre especificado
+        sql = """
+            SELECT correo 
+            FROM usuarios 
+            WHERE tipo_de_sangre = %s
+        """
+        cursor.execute(sql, (tipo_sangre,))
+        
+        # Obtener todos los correos
+        correos = cursor.fetchall()
+        
+        # Extraer solo los correos de la tupla
+        correos_lista = [row[0] for row in correos]
+        
+        return correos_lista
+    except Exception as e:
+        raise Exception(f"No fue posible obtener los correos para el tipo de sangre {tipo_sangre}") from e

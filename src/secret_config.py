@@ -11,13 +11,12 @@ NOTICONTRA = "redpulse.123"
 NOTI_APPCONTRA = "qeip heka pcay mahv"
 
 # Secret key para el apartado web (Flask)
-
 SECRET_KEY_FLASK = "j98h3y2qweRTY8uiopASDFGHJKLZXCVBNM,./1234567890-=`~!@#$%^&*()_+[]{}|;:?><"
 
 # Key para la conexion con MetaAI # https://groq.com/groqcloud/
 CHAT_BOT_KEY = "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"
 
-# Key para la conexion con ChatGpt
+# Key para la conexion con ChatGpt - Expired
 OLD_CHAT_BOT_KEY = "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"
 
 # Correo por defecto del administrador
