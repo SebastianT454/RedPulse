@@ -23,16 +23,17 @@ def obtenerValorUsuarioSesion(clave):
     user_data = session.get('user_data')
     return user_data[clave]
 
-def generarUsuarioSesion(nombre_completo: str, contrasena: str, correo: str, numero_documento: str, 
+def generarUsuarioSesion(nombre_completo: str, contrasena: str, codigo_recuperacion: str, correo: str, numero_documento: str, 
                 donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
                 perfil_imagen_deletehash: str):
     
     registros = obtenerUsuarioRegistros( numero_documento , tipo_documento )
-    print(registros)
+
     return {
         'nombre': nombre_completo,
         'contrasena': contrasena,
+        'codigo_recuperacion': codigo_recuperacion,
         'correo': correo,
         'numero_documento': numero_documento,
         'donante': donante,

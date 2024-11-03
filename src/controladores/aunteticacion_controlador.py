@@ -7,6 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # generate_password_hash: genera la encriptacion.
 # check_password_hash: comprueba si un valor cifrado concuerda con su valor original.
 
+import secrets
+
 # Base de datos.
 from servicios.BaseDeDatos.usuario_bd_servicio import *
 
@@ -29,18 +31,17 @@ def verificacionLogin(numero_documento: str, tipo_documento: TipoDocumento, cont
     
     return True
 
-def registrarUsuario(nombre: str, contrasena: str, correo: str, numero_documento: str, 
+def registrarUsuario(nombre: str, contrasena: str, codigo_recuperacion: str, correo: str, numero_documento: str, 
                 donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
                 perfil_imagen_deletehash: str):
-    
     # Lógica para registrar un nuevo usuario
 
     # Encriptar contraseña.
     contrasena_encriptada = generate_password_hash(contrasena, 'pbkdf2:sha256', 10)
 
     # Crear el usuario ya que no existe.
-    usuario = Usuario(nombre, contrasena_encriptada, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, 
+    usuario = Usuario(nombre, contrasena_encriptada, codigo_recuperacion, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, 
                       tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash)
     
     insertarEnTabla(usuario)
@@ -70,4 +71,4 @@ def obtenerValoresUsuario(request):
     # Definir el nombre completo.
     nombre_completo = nombre + ' ' + apellido
 
-    return Usuario(nombre_completo, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, None, None)
+    return Usuario(nombre_completo, contrasena, None, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, None, None)

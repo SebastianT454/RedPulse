@@ -11,6 +11,7 @@ import secret_config
 
 # Encriptacion.
 from werkzeug.security import generate_password_hash
+import secrets
 
 class ErrorNotFound( Exception ):
     """ Excepcion que indica que una row buscada no fue encontrada"""
@@ -54,12 +55,12 @@ def insertarEnTabla( usuario ):
         # Todas las instrucciones se ejecutan a tavés de un cursor
         cursor.execute(f"""
         insert into usuarios (
-            nombre, contrasena, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash
+            nombre, contrasena, codigo_recuperacion, correo, numero_documento, donante, admin, enfermero, puntos, total_donado, tipo_de_sangre, tipo_documento, perfil_imagen_link, perfil_imagen_deletehash
         )
         values 
         (
-            '{usuario.nombre}',  '{usuario.contrasena}', '{usuario.correo}', '{usuario.numero_documento}', '{usuario.donante}', '{usuario.admin}', '{usuario.enfermero}', 
-            '{usuario.puntos}', '{usuario.total_donado}', '{usuario.tipo_de_sangre}', '{usuario.tipo_documento}', '{usuario.perfil_imagen_link}', 
+            '{usuario.nombre}',  '{usuario.contrasena}', '{usuario.codigo_recuperacion}', '{usuario.correo}', '{usuario.numero_documento}', '{usuario.donante}', '{usuario.admin}', 
+            '{usuario.enfermero}', '{usuario.puntos}', '{usuario.total_donado}', '{usuario.tipo_de_sangre}', '{usuario.tipo_documento}', '{usuario.perfil_imagen_link}', 
             '{usuario.perfil_imagen_deletehash}'
         );
                        """)
@@ -84,7 +85,7 @@ def obtenerUsuarioPorDocumento( numero_documento, tipo_documento ):
     if row is None:
         raise ErrorNotFound("El usuario buscado, no fue encontrado. Numero documento y tipo de documento: ", numero_documento, tipo_documento)
 
-    result = Usuario( row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12] )
+    result = Usuario( row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13] )
     return result
 
 def verificarExistenciaUsuario( numero_documento, tipo_documento ):
@@ -108,6 +109,15 @@ def verificarCorreo( correo ):
     if row is None:
         return False
     return True
+
+def obtenerCodigoRecuperacion( correo ):
+    """ Busca un usuario por el numero de documento y validamos si existe """
+
+    cursor = obtenerCursor()
+    cursor.execute(f"SELECT codigo_recuperacion from usuarios where CORREO = '{correo}' ")
+    row = cursor.fetchone()
+
+    return row[0]
 
 def actualizarEstadoDonante( numero_documento, tipo_documento ):
     cursor = obtenerCursor()
@@ -149,9 +159,11 @@ def actualizarContrasena(email, nueva_contrasena):
     cursor = obtenerCursor()
     try:
         contrasena_encriptada = generate_password_hash(nueva_contrasena, method='pbkdf2:sha256', salt_length=10)
-        
-        sql = f"UPDATE usuarios SET contrasena = %s WHERE correo = %s"
-        cursor.execute(sql, (contrasena_encriptada, email))  
+        # Nuevo codigo de recuperacion
+        codigo_recuperacion = secrets.token_urlsafe(16)
+
+        sql = "UPDATE usuarios SET contrasena = %s, codigo_recuperacion = %s WHERE correo = %s"
+        cursor.execute(sql, (contrasena_encriptada, codigo_recuperacion, email))
 
         cursor.connection.commit()
     except Exception as e:

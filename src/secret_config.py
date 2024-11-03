@@ -8,6 +8,7 @@ PGPORT = 5432 # POR DEFECTO ES 5432, PERO PUEDE CAMBIAR SI NO SE UTILIZA NEON TE
 # Token para bot de notificaciones.
 NOTIEMAIL = "noreplyredpulse@gmail.com"
 NOTICONTRA = "redpulse.123"
+NOTI_APPCONTRA = "qeip heka pcay mahv"
 
 # Secret key para el apartado web (Flask)
 

@@ -1,7 +1,7 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-from secret_config import NOTIEMAIL, NOTICONTRA, ADMINEMAIL
+from secret_config import NOTIEMAIL, NOTI_APPCONTRA, ADMINEMAIL
 
 
 class Notificaciones:
@@ -9,7 +9,7 @@ class Notificaciones:
         self.admin_email = admin_email
         if None in [de_email]:
             self.de_email = NOTIEMAIL
-            self.contra = NOTICONTRA
+            self.contra = NOTI_APPCONTRA
         else:
             self.de_email = de_email    
             self.contra = contra
@@ -48,13 +48,13 @@ class Notificaciones:
         )
         self.enviar_notificacion(self.admin_email, asunto, mensaje)
 
-    def recuperar_contra_notificacion(self, para_email, token):
-        reset_url = f"http://tuservidor.com/reset-password?token={token}" #cambiar cuando tengamos el deploy
+    def recuperar_contra_notificacion(self, para_email, codigo):
+        codigo_recuperacion = f"Tu código de confirmación es: {codigo}" #cambiar cuando tengamos el deploy
         asunto = "Recuperación de Contraseña"
         mensaje = (
-            f"Has solicitado restablecer tu contraseña. Para continuar, haz clic en el siguiente enlace:\n\n"
-            f"{reset_url}\n\n"
-            "Este enlace es válido solo por un tiempo limitado. Si no solicitaste este cambio, puedes ignorar este mensaje."
+            f"Has solicitado restablecer tu contraseña. Para continuar, copia y pega en nuestra pagina web el siguiente codigo:\n\n"
+            f"{codigo_recuperacion}\n\n"
+            "Con este codigo puedes restaurar tu contraseña. Si no solicitaste este cambio, puedes ignorar este mensaje."
         )
         self.enviar_notificacion(para_email, asunto, mensaje)
 
