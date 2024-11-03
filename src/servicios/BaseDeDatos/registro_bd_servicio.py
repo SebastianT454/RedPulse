@@ -80,6 +80,32 @@ def actualizarEstadoRegistro( registro_id, estado ):
     except Exception as e:
         cursor.connection.rollback()
         raise Exception("No fue posible actualizar el estado del registro: ") from e
+    
+def obtenerUsuarioRegistros( numero_documento , tipo_documento ):
+    """ Obtiene todas los registros que sean solicitud y tengan estado pendiente """
+    cursor = obtenerCursor()
+    
+    cursor.execute(f"""
+    SELECT TIPO_REGISTRO, CANTIDAD, PRIORIDAD, ESTADO, FECHA, 
+           USUARIO_DOCUMENTO, USUARIO_TIPO_DOCUMENTO
+    FROM REGISTROS
+    WHERE USUARIO_DOCUMENTO = '{numero_documento}'
+      AND USUARIO_TIPO_DOCUMENTO = '{tipo_documento}'
+    """)
+    rows = cursor.fetchall()
+    
+    registros = [
+        {
+            "TIPO_REGISTRO": row[0],
+            "CANTIDAD": row[1],
+            "PRIORIDAD": row[2],
+            "ESTADO": row[3],
+            "FECHA": row[4].strftime("%d-%m-%Y"),
+        }
+        for row in rows
+    ]
+    
+    return registros
 
 def obtenerSolicitudesPendientes():
     """ Obtiene todas los registros que sean solicitud y tengan estado pendiente """

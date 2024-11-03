@@ -6,8 +6,10 @@ from modelos.usuario import *
 # Importando session
 from flask import session
 
-# Importando la imagen por defecto del usuario.
+# Importando funcionalidad de registros db
+from servicios.BaseDeDatos.registro_bd_servicio import obtenerUsuarioRegistros
 
+# Importando la imagen por defecto del usuario.
 url = secret_config.DEFAULT_PROFILE_PICTURE
 
 # Funciones
@@ -25,6 +27,9 @@ def generarUsuarioSesion(nombre_completo: str, contrasena: str, correo: str, num
                 donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
                 perfil_imagen_deletehash: str):
+    
+    registros = obtenerUsuarioRegistros( numero_documento , tipo_documento )
+    print(registros)
     return {
         'nombre': nombre_completo,
         'contrasena': contrasena,
@@ -38,7 +43,9 @@ def generarUsuarioSesion(nombre_completo: str, contrasena: str, correo: str, num
         'tipo_de_sangre': tipo_de_sangre,
         'tipo_documento': tipo_documento,
         'perfil_imagen_link': perfil_imagen_link,
-        'perfil_imagen_deletehash': perfil_imagen_deletehash
+        'perfil_imagen_deletehash': perfil_imagen_deletehash,
+        'registros': registros,
+        'cnt_registros': len(registros)
         }
 
 def generarUsuarioImagen(imagen, imgur_handler):

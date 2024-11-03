@@ -1,5 +1,4 @@
 # Controla las operaciones de almacenamiento de la clase usuario
-
 import sys
 sys.path.append("src")
 
@@ -10,7 +9,8 @@ from modelos.usuario import Usuario
 import psycopg2
 import secret_config
 
-from controladores.aunteticacion_controlador import hash_contrasena
+# Encriptacion.
+from werkzeug.security import generate_password_hash
 
 class ErrorNotFound( Exception ):
     """ Excepcion que indica que una row buscada no fue encontrada"""
@@ -119,7 +119,6 @@ def actualizarEstadoDonante( numero_documento, tipo_documento ):
         cursor.connection.rollback()
         raise Exception("No fue posible actualizar el estado de donante para el usuario con el numero de documento: " + str(numero_documento)) from e
 
-
 def actualizarPuntos( numero_documento, tipo_documento, cantidad_puntos ):
     """ Agrega una cantidad de puntos al usuario especificado """
     
@@ -131,13 +130,25 @@ def actualizarPuntos( numero_documento, tipo_documento, cantidad_puntos ):
     except Exception as e:
         cursor.connection.rollback()
         raise Exception("No fue posible agregar puntos al usuario con el numero de documento: " + str(numero_documento)) from e
+    
+def actualizarCantidadDonada( numero_documento, tipo_documento, cantidad_donada ):
+    """ Agrega una cantidad de puntos al usuario especificado """
+    
+    cursor = obtenerCursor()
+    try:
+        sql = f"UPDATE usuarios SET total_donado = {cantidad_donada} WHERE numero_documento = '{numero_documento}' AND tipo_documento = '{tipo_documento}'"
+        cursor.execute(sql)
+        cursor.connection.commit()
+    except Exception as e:
+        cursor.connection.rollback()
+        raise Exception("No fue posible agregar puntos al usuario con el numero de documento: " + str(numero_documento)) from e
 
 def actualizarContrasena(email, nueva_contrasena):
     """ Actualiza la contraseña del usuario en la base de datos usando su correo electrónico """
     
     cursor = obtenerCursor()
     try:
-        contrasena_encriptada = hash_contrasena(nueva_contrasena)
+        contrasena_encriptada = generate_password_hash(nueva_contrasena, method='pbkdf2:sha256', salt_length=10)
         
         sql = f"UPDATE usuarios SET contrasena = %s WHERE correo = %s"
         cursor.execute(sql, (contrasena_encriptada, email))  

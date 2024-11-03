@@ -94,6 +94,17 @@ def perfil():
     
     return render_template('perfil.html', user_data=user_data)
 
+@app.route('/movimientos', methods=['GET', 'POST'])
+def movimientos():
+    # Obtener datos del usuario desde la sesión
+    user_data = session.get('user_data')
+
+    # Verificar si ya hay datos de usuario en la sesión
+    if not user_data:
+       return redirect(url_for('home'))
+
+    return render_template('movimientos.html', user_data=user_data)
+
 @app.route('/puntos', methods=['GET', 'POST'])
 def puntos():
     # Obtener datos del usuario desde la sesión
