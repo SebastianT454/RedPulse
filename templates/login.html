@@ -27,7 +27,7 @@
                     <option value="Cedula de Extranjeria">Cédula de Extranjería</option>
                 </select>
                 <input type="password" name="contrasena" placeholder="Contraseña" required>
-                <div class="forgot-password"><a href="#">¿Olvidó la contraseña?</a></div>
+                <div class="forgot-password"><a href="{{ url_for('solicitar_recuperacion') }}">¿Olvidó la contraseña?</a></div>
                 
                 <button type="submit">Ingresar</button>
             </form>

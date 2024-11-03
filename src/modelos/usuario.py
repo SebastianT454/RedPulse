@@ -17,12 +17,13 @@ class TipoSangre(Enum):
     O_NEGATIVO = "O-"
 
 class Usuario:
-    def __init__(self, nombre: str, contrasena: str, correo: str, numero_documento: str, 
+    def __init__(self, nombre: str, contrasena: str, codigo_recuperacion: str, correo: str, numero_documento: str, 
                 donante: bool, admin: bool, enfermero: bool, puntos: int, total_donado: int, 
                 tipo_de_sangre: TipoSangre, tipo_documento: TipoDocumento, perfil_imagen_link: str, 
                 perfil_imagen_deletehash: str):
         self.nombre = nombre
         self.contrasena = contrasena
+        self.codigo_recuperacion = codigo_recuperacion
         self.correo = correo
         self.numero_documento = numero_documento
         self.donante = donante

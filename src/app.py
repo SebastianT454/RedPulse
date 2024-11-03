@@ -4,11 +4,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 #Imgur
 from servicios.Misc.flask_imgur_servicio import *
 
-#otros
-import secrets
-from redis import StrictRedis
-from datetime import timedelta
-
 #Misc
 import os
 
@@ -18,9 +13,11 @@ from controladores.aunteticacion_controlador import *
 # Controlador de puntos
 from controladores.puntos_controlador import *
 
-# Base de datos, chatbot.
+# Base de datos
 from servicios.BaseDeDatos.usuario_bd_servicio import *
 from servicios.BaseDeDatos.registro_bd_servicio import *
+
+# Chabot
 from servicios.chatbot_servicio import *
 
 # Importar el servicio de sesiones construido.
@@ -45,8 +42,6 @@ app.secret_key = secret_config.SECRET_KEY_FLASK
 # Imgur client id para la API
 app.config["IMGUR_ID"] = secret_config.IMGUR_CLIENT_ID
 imgur_handler = Imgur(app)
-
-redis_client = StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 #////////////////////////////// Rutas //////////////////////////////////////////////
 
@@ -260,6 +255,9 @@ def login():
     if 'user_data' in session:
         return redirect(url_for('home'))
     
+    if 'cambio_contrasena_exitoso' in session:
+        session['cambio_contrasena_exitoso'] = None
+
     if request.method == 'POST':
         # Obtener datos del formulario
         numero_documento = request.form.get('numero_documento')
@@ -276,7 +274,7 @@ def login():
             usuario = obtenerUsuarioPorDocumento(numero_documento, tipo_documento)
 
             # Guardar los datos en la sesión
-            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
+            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, None, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
                                                         usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
                                                         usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
 
@@ -308,66 +306,74 @@ def registro():
             imagen = request.files.get('perfil_imagen')
             usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
 
-            registrarUsuario(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
+            # Crear codigo de recuperacion
+            usuario.codigo_recuperacion = secrets.token_urlsafe(16)
+
+            registrarUsuario(usuario.nombre, usuario.contrasena, usuario.codigo_recuperacion, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
                              usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
                              usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
 
             # Guardar los datos en la sesión
-            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, usuario.correo, usuario.numero_documento, usuario.donante, usuario.admin, 
-                                                        usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
+            session['user_data'] = generarUsuarioSesion(usuario.nombre, usuario.contrasena, None, usuario.correo, usuario.numero_documento, usuario.donante, 
+                                                        usuario.admin, usuario.enfermero, usuario.puntos, usuario.total_donado, usuario.tipo_de_sangre, usuario.tipo_documento,
                                                         usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
         
     return render_template('registro.html')
 
-# Ruta para solicitar recuperación de contraseña y recuperacion de contraseña
-def guardarTokenRecuperacion(email, token, expiracion_minutos=30):
-    redis_client.setex(f"recuperacion:{email}", timedelta(minutes=expiracion_minutos), token)
-
-def obtenerTokenRecuperacion(email):
-    return redis_client.get(f"recuperacion:{email}")
-
-def eliminarTokenRecuperacion(email):
-    redis_client.delete(f"recuperacion:{email}")
-
-@app.route('/solicitar_recuperacion', methods=['POST'])
+@app.route('/solicitar_recuperacion', methods=['GET', 'POST'])
 def solicitar_recuperacion():
-    data = request.get_json()
-    email = data.get('email')
+    # Verificar si ya hay datos de usuario en la sesión
+    if 'user_data' in session:
+        return redirect(url_for('home'))
 
-    # Verificar si el correo está registrado
-    if not verificarCorreo(email):
-        return render_template('solicitar_recuperacion')
+    if request.method == 'POST':
+        obtained_email = request.form.get('correo')
 
-    # Generar token único para la recuperación de contraseña
-    token = secrets.token_hex(16)
+        # Verificar si el correo está registrado
+        if not verificarCorreo(obtained_email):
+            session['correo_valido_resultado'] = False
+            return render_template('solicitar_recuperacion.html')
+
+        # Correo valido
+        session['correo_valido_resultado'] = True
+
+        codigo = obtenerCodigoRecuperacion(obtained_email)
+
+        # Guardar codigo de recuperacion
+        session['correo_recuperacion'] = codigo
+        session['correo_recuperacion_asociado'] = obtained_email
+
+        # Enviar notificación por correo con el enlace de recuperación
+        email.recuperar_contra_notificacion(obtained_email, codigo)
     
-    # Guardar el token en Redis con expiración
-    guardarTokenRecuperacion(email, token)
+    return render_template('solicitar_recuperacion.html')
 
-    # Enviar notificación por correo con el enlace de recuperación
-    email.enviar_email_restauracion(email, token)
+@app.route('/reestablecer_contrasena', methods=['GET', 'POST'])
+def reestablecer_contrasena():
+    # Verificar si ya hay datos de usuario en la sesión
+    if 'user_data' in session:
+        return redirect(url_for('home'))
     
-    return render_template('solicitar_recuperacion')
+    if request.method == 'POST':
+        codigo_recuperacion = session['correo_recuperacion']
+        codigo_recuperacion_ingresado = request.form.get('codigo_recuperacion')
 
-@app.route('/reestablecer-contraseña', methods=['POST'])
-def reestablecer_contraseña():
-    data = request.get_json()
-    email = data.get('email')
-    token = data.get('token')
-    nueva_contrasena = data.get('nueva_contrasena')
+        nueva_contrasena = request.form.get('nueva_contrasena')
+        confirmacion_nueva_contrasena = request.form.get('confirmacion_nueva_contrasena')
 
-    # Verificar si el token es válido
-    token_almacenado = obtenerTokenRecuperacion(email)
-    if not token_almacenado or token_almacenado != token:
-        return render_template('restablecer_contrasena')
+        # verificar si el codigo ingresado y las contraseñas son iguales.
+        if codigo_recuperacion != codigo_recuperacion_ingresado or nueva_contrasena != confirmacion_nueva_contrasena:
+            session['cambio_contrasena_exitoso'] = False
+            return render_template('reestablecer_contrasena.html')
+        
+        session['cambio_contrasena_exitoso'] = True
 
-    # Actualizar la contraseña en la base de datos
-    actualizarContrasena(email, nueva_contrasena)
+        actualizarContrasena(session['correo_recuperacion_asociado'], nueva_contrasena)
+        session['correo_recuperacion'] = None
+        session['correo_recuperacion_asociado'] = None
+        session['correo_valido_resultado'] = None
     
-    # Eliminar el token de Redis después de su uso
-    eliminarTokenRecuperacion(email)
-    
-    return render_template('login')
+    return render_template('reestablecer_contrasena.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
