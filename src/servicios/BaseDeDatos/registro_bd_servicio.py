@@ -142,7 +142,7 @@ def obtenerSolicitudesPendientes():
 
     return solicitudes
 
-def obtener_donaciones_por_mes():
+def obtenerDonacionesPorMes():
     """ Obtiene todas las donaciones realizadas en el mes """
     cursor = obtenerCursor()
     
@@ -157,11 +157,11 @@ def obtener_donaciones_por_mes():
     row = cursor.fetchall()
     
     donaciones_por_mes = {mes.strip(): cantidad for mes, cantidad in row}
-    donaciones_por_mes = traducir_meses_a_espanol(donaciones_por_mes)
+    donaciones_por_mes = traducirMesesAlEspañol(donaciones_por_mes)
 
     return donaciones_por_mes
 
-def obtener_cantidad_sangre_por_tipo():
+def obtenerCantidadDeSangrePorTipo():
     """ Obtiene todas las donaciones realizadas en el mes """
     cursor = obtenerCursor()
     
@@ -180,7 +180,7 @@ def obtener_cantidad_sangre_por_tipo():
 
 # funcion para traducir los meses obtenidos del postgres
 
-def traducir_meses_a_espanol(diccionario_meses):
+def traducirMesesAlEspañol(diccionario_meses):
     meses_en_espanol = {
         "January": "Enero",
         "February": "Febrero",
@@ -205,3 +205,24 @@ def obtenerUsuarioPorRegistro(registro_id):
     cursor.execute("SELECT usuario_documento, usuario_tipo_documento FROM registros WHERE id = %s", (registro_id,))
     resultado = cursor.fetchone()
     return resultado
+
+def obtenerCantidadSangreDonada(tipo_sangre):
+    """Obtiene la cantidad total de sangre donada para un tipo de sangre específico"""
+    
+    cursor = obtenerCursor()
+    try:
+        # Consulta SQL para sumar las cantidades de donaciones del tipo de sangre especificado
+        sql = """
+            SELECT COALESCE(SUM(cantidad), 0) 
+            FROM registros 
+            WHERE tipo_registro = 'Donacion' AND tipo_sangre = %s
+        """
+        cursor.execute(sql, (tipo_sangre,))
+        
+        # Obtener el resultado de la suma
+        cantidad_total = cursor.fetchone()[0]
+        
+        return cantidad_total
+    except Exception as e:
+        raise Exception(f"No fue posible obtener la cantidad total de sangre donada para el tipo de sangre {tipo_sangre}") from e
+

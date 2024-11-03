@@ -31,12 +31,12 @@ class Notificaciones:
         server.quit()
     
     def parametros_notificacion_donante(self, para_email, tipo_sangre):
-            asunto = "¡Tu ayuda es crucial! Nueva Campaña de Donación de Sangre Disponible"
+            asunto = "¡Tu ayuda es crucial! Necesitamos que te acerques a nuestro centro de donacion!"
             mensaje = (
-                f"Espero que estés bien. Nos gustaría informarte sobre una importante campaña de donación de sangre que se llevará a cabo. "
-                f"Esta campaña es especialmente crítica ya que estamos en necesidad urgente de sangre de tipo {tipo_sangre}. "
-                f"Como donante valioso, tu participación puede marcar la diferencia en la vida de muchos pacientes que dependen de transfusiones. "
-                f"La donación es rápida y segura, y cada gota cuenta."
+                f"Espero que estés bien. Nos gustaría informarte sobre una importante accion que se llevará a cabo. "
+                f"Necesitamos de tu presencia en nuestro centro de donación ya que es una situación crítica porque estamos en necesidad urgente de sangre de tipo {tipo_sangre}. "
+                f"Como donante valioso o solicitante, tu participación puede marcar la diferencia en la vida de muchos pacientes que dependen de transfusiones. "
+                f"La donación es rápida y segura, y cada gota cuenta, gracias."
             )
             self.enviar_notificacion(para_email, asunto, mensaje)
 
@@ -44,7 +44,7 @@ class Notificaciones:
         asunto = f"Niveles de sangre {tipo_sangre} bajos"
         mensaje = (
             f"Los niveles actuales de la sangre de tipo {tipo_sangre} se encuentran por debajo de lo recomendado, "
-            "es recomendable iniciar una campaña para retomar niveles seguros."
+            "se le ha notificado a todos los donantes con ese tipo de sangre especifico, es recomendable tomar medidas para retomar niveles seguros de sangre."
         )
         self.enviar_notificacion(self.admin_email, asunto, mensaje)
 
@@ -60,10 +60,12 @@ class Notificaciones:
 
          
     def solicitud_notificacion(self, para_email, estado):
-        asunto = "Solicitud de sangre"
+        asunto = ""
         if(estado == "Aprobado"):
+            asunto = "Solicitud de sangre aprobada"
             res = "aprobada. Puede reclamarla en nuestro punto oficial de atención o, si lo prefiere, comuníquese con nosotros para obtener más detalles."
         else:
+            asunto = "Solicitud de sangre denegada"
             res = "denegada. Si desea obtener información adicional, no dude en ponerse en contacto con nosotros."
         mensaje = "Su solicitud ha sido " + res
         self.enviar_notificacion(para_email, asunto, mensaje)

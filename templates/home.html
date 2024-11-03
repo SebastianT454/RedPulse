@@ -12,7 +12,8 @@
     <div class="navbar">
         <div class="logo"><span class="red">Red</span><span class="pulse">Pulse</span></div>
         <ul>
-            <li><a href="#">Nosotros</a></li>
+            <li><a href="{{ url_for('nosotros') }}">Nosotros</a></li>
+            <li><a href="{{ url_for('informacion_preparativos') }}">Preparativos Donación</a></li>
             {% if user_data %}
             <li><a href="{{ url_for('solicitud_donacion') }}">Solicitar Sangre</a></li>
             {% endif %}

@@ -13,6 +13,9 @@ from controladores.aunteticacion_controlador import *
 # Controlador de puntos
 from controladores.puntos_controlador import *
 
+# Controlador de solicitudes pendientes
+from controladores.solicitudes_pendientes_controlador import *
+
 # Base de datos
 from servicios.BaseDeDatos.usuario_bd_servicio import *
 from servicios.BaseDeDatos.registro_bd_servicio import *
@@ -64,6 +67,14 @@ def home():
     else:
         # Se renderiza el home para cada uno.
         return render_template('home.html', user_data=user_data)
+
+@app.route('/nosotros')
+def nosotros():
+    return render_template('nosotros.html')
+
+@app.route('/informacion_preparativos')
+def informacion_preparativos():
+    return render_template('informacion_preparativos.html')
 
 @app.route('/logout')
 def logout():
@@ -165,11 +176,10 @@ def solicitudes_pendientes():
         data = request.get_json()
         solicitud_id = data.get('id')
         accion = data.get('accion')
+        tipo_sangre_solicitud = data.get('tipo_sangre')
 
         actualizarEstadoRegistro(solicitud_id, accion)
-        usuario_solicitud = obtenerUsuarioPorRegistro(solicitud_id)
-        correo_usuario = obtenerCorreoUsuario(usuario_solicitud[0], usuario_solicitud[1])
-        email.solicitud_notificacion(correo_usuario, accion)
+        verificarNivelesDeSangre(solicitud_id, accion, tipo_sangre_solicitud)
 
     return render_template('solicitudes_pendientes.html', solicitudes_pendientes=json.dumps(solicitudes))
 
@@ -183,8 +193,8 @@ def estadisticas():
         return redirect(url_for('home'))
     
     # Obtener datos de las estadisticas
-    donaciones_por_mes = obtener_donaciones_por_mes()
-    sangre_por_tipo = obtener_cantidad_sangre_por_tipo()
+    donaciones_por_mes = obtenerDonacionesPorMes()
+    sangre_por_tipo = obtenerCantidadDeSangrePorTipo()
 
     return render_template('estadisticas.html', 
                            donaciones_por_mes=json.dumps(donaciones_por_mes), 
@@ -322,6 +332,8 @@ def registro():
                                                         usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash)
         
     return render_template('registro.html')
+
+# Apartados de solicitar y reestablecer contraseña
 
 @app.route('/solicitar_recuperacion', methods=['GET', 'POST'])
 def solicitar_recuperacion():
