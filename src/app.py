@@ -167,6 +167,9 @@ def solicitudes_pendientes():
         accion = data.get('accion')
 
         actualizarEstadoRegistro(solicitud_id, accion)
+        usuario_solicitud = obtenerUsuarioPorRegistro(solicitud_id)
+        correo_usuario = obtenerCorreoUsuario(usuario_solicitud[0], usuario_solicitud[1])
+        email.solicitud_notificacion(correo_usuario, accion)
 
     return render_template('solicitudes_pendientes.html', solicitudes_pendientes=json.dumps(solicitudes))
 

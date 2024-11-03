@@ -59,3 +59,11 @@ class Notificaciones:
         self.enviar_notificacion(para_email, asunto, mensaje)
 
          
+    def solicitud_notificacion(self, para_email, estado):
+        asunto = "Solicitud de sangre"
+        if(estado == "Aprobado"):
+            res = "aprobada. Puede reclamarla en nuestro punto oficial de atención o, si lo prefiere, comuníquese con nosotros para obtener más detalles."
+        else:
+            res = "denegada. Si desea obtener información adicional, no dude en ponerse en contacto con nosotros."
+        mensaje = "Su solicitud ha sido " + res
+        self.enviar_notificacion(para_email, asunto, mensaje)

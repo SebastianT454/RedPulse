@@ -169,3 +169,13 @@ def actualizarContrasena(email, nueva_contrasena):
     except Exception as e:
         cursor.connection.rollback()
         raise Exception(f"No fue posible actualizar la contraseña para el usuario con el correo: {email}") from e
+
+def obtenerCorreoUsuario(usuario_documento, usuario_tipo_documento):
+    cursor = obtenerCursor()
+    cursor.execute(
+        "SELECT correo FROM usuarios WHERE tipo_documento = %s AND numero_documento = %s",
+        (usuario_tipo_documento, usuario_documento)
+    )
+    res = cursor.fetchone()
+    
+    return res[0] if res else None
