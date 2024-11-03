@@ -199,3 +199,9 @@ def traducir_meses_a_espanol(diccionario_meses):
     # Crear un nuevo diccionario con las claves traducidas
     diccionario_traducido = {meses_en_espanol[mes]: valor for mes, valor in diccionario_meses.items()}
     return diccionario_traducido
+
+def obtenerUsuarioPorRegistro(registro_id):
+    cursor = obtenerCursor()
+    cursor.execute("SELECT usuario_documento, usuario_tipo_documento FROM registros WHERE id = %s", (registro_id,))
+    resultado = cursor.fetchone()
+    return resultado
