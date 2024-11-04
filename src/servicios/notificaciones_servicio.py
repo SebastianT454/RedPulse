@@ -69,3 +69,14 @@ class Notificaciones:
             res = "denegada. Si desea obtener información adicional, no dude en ponerse en contacto con nosotros."
         mensaje = "Su solicitud ha sido " + res
         self.enviar_notificacion(para_email, asunto, mensaje)
+
+    def redimir_puntos_notificacion(self, para_email, codigo):
+        asunto = "Redención de puntos"
+        mensaje = (
+                    "Gracias por redimir sus puntos en nuestro sistema de recompensas. "
+                    "Su solicitud ha sido procesada con éxito, y a continuación le proporcionamos su código de bono:\n\n"
+                    f"Código de Bono: {codigo}\n\n"
+                    "Puede utilizar este código para disfrutar de su recompensa. "
+                    "Si necesita asistencia adicional o tiene alguna pregunta, estamos aquí para ayudarle."
+                    )
+        self.enviar_notificacion(para_email, asunto, mensaje)
