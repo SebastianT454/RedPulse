@@ -7,6 +7,13 @@ from servicios.BaseDeDatos.usuario_bd_servicio import actualizarPuntos
 # Importando session
 from flask import session
 
+#Misc
+import secrets
+
+#email
+from servicios.notificaciones_servicio import *
+email = Notificaciones()
+
 def procesarPuntos(puntos_seleccionados: int):
     # Obtener datos y actualizar en la session y base de datos
     user_data = session.get('user_data')
@@ -20,6 +27,8 @@ def procesarPuntos(puntos_seleccionados: int):
     if puntos_restantes >= 0:
         actualizarUsuarioSesion('puntos', puntos_restantes)
         actualizarPuntos(numero_documento, tipo_de_documento, puntos_restantes)
+        codigo_redencion = secrets.token_urlsafe(16)
+        email.redimir_puntos_notificacion(user_data['correo'], codigo_redencion)
 
         return True
     return False

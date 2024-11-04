@@ -126,8 +126,7 @@ def puntos():
         puntos_seleccionados = int(data.get('puntos_seleccionados'))  # Acceder a los puntos seleccionados especificamente
 
         puntos_procesados = procesarPuntos(puntos_seleccionados)
-        codigo_redencion = secrets.token_urlsafe(16)
-        email.redimir_puntos_notificacion(user_data.get('correo'), codigo_redencion)
+        
         return jsonify(success=puntos_procesados, nuevos_puntos=obtenerValorUsuarioSesion('puntos'))
 
     return render_template('puntos.html', user_data=user_data)
