@@ -20,7 +20,7 @@ def verificarNivelesDeSangre(solicitud_id, accion, tipo_sangre_solicitud):
     cnt_sangre_solicitud = obtenerCantidadSangreDonada(tipo_sangre_solicitud)
 
     if cnt_sangre_solicitud < CNT_SANGRE_MINIMA:
-        correos_usuario = obtenerCorreosPorTipoSangre(tipo_sangre_solicitud)
+        correos_usuario = obtenerCorreosDonantesTipoSangreEspecifico(tipo_sangre_solicitud)
 
         for correo in correos_usuario:
             email.parametros_notificacion_donante(correo, tipo_sangre_solicitud)

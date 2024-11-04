@@ -180,16 +180,16 @@ def obtenerCorreoUsuario(usuario_documento, usuario_tipo_documento):
     
     return res[0] if res else None
 
-def obtenerCorreosPorTipoSangre(tipo_sangre):
+def obtenerCorreosDonantesTipoSangreEspecifico(tipo_sangre):
     """Obtiene todos los correos de los usuarios con un tipo de sangre específico"""
     
     cursor = obtenerCursor()
     try:
-        # Consulta SQL para seleccionar los correos de usuarios con el tipo de sangre especificado
+        # Consulta SQL para seleccionar los correos de usuarios con el tipo de sangre especificado y que sean donantes
         sql = """
             SELECT correo 
             FROM usuarios 
-            WHERE tipo_de_sangre = %s
+            WHERE tipo_de_sangre = %s AND donante = TRUE
         """
         cursor.execute(sql, (tipo_sangre,))
         
