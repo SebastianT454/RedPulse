@@ -35,7 +35,7 @@ class Notificaciones:
             mensaje = (
                 f"Espero que estés bien. Nos gustaría informarte sobre una importante accion que se llevará a cabo. "
                 f"Necesitamos de tu presencia en nuestro centro de donación ya que es una situación crítica porque estamos en necesidad urgente de sangre de tipo {tipo_sangre}. "
-                f"Como donante valioso o solicitante, tu participación puede marcar la diferencia en la vida de muchos pacientes que dependen de transfusiones. "
+                f"Como donante valioso, tu participación puede marcar la diferencia en la vida de muchos pacientes que dependen de transfusiones. "
                 f"La donación es rápida y segura, y cada gota cuenta, gracias."
             )
             self.enviar_notificacion(para_email, asunto, mensaje)
