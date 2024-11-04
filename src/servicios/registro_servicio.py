@@ -4,9 +4,10 @@ sys.path.append("src")
 
 from servicios.BaseDeDatos.usuario_bd_servicio import obtenerUsuarioPorDocumento, actualizarEstadoDonante, actualizarPuntos, actualizarCantidadDonada
 from servicios.BaseDeDatos.registro_bd_servicio import insertarEnTabla as insertarRegistro
+from servicios.sesion_servicio import *
+
 from modelos.registro import Registro
 from datetime import datetime
-
 
 def insertarDonacion(numero_documento, tipo_documento, fecha, cantidad_donada, tipo_registro="Donacion"):
     try:
@@ -59,6 +60,21 @@ def crearRegistro(request, user_data):
     try:
         # Intentar insertar en la base de datos
         insertarRegistro(registro)
+
+        # Formato del registro para añadirlo a la lista en user_data
+        registro_dict = {
+            "TIPO_REGISTRO": registro.tipo_registro,
+            "CANTIDAD": int(registro.cantidad),  # Asegura que cantidad sea un número entero
+            "PRIORIDAD": int(registro.prioridad),
+            "ESTADO": registro.estado,
+            "FECHA": datetime.now().strftime("%d-%m-%Y"),
+        }
+
+        # Actualizar sesión añadiendo el nuevo registro a la lista de 'registros' y 'cnt de registros'
+        actualizarUsuarioSesion('registros', registro_dict, True)
+        cnt_registros = obtenerValorUsuarioSesion('registros')
+        actualizarUsuarioSesion('cnt_registros', len(cnt_registros))
+
         return True 
     except:
         return False 

@@ -14,9 +14,15 @@ url = secret_config.DEFAULT_PROFILE_PICTURE
 
 # Funciones
 
-def actualizarUsuarioSesion(clave, nuevo_valor):
+def actualizarUsuarioSesion(clave, nuevo_valor, agregar_a_lista=False):
     user_data = session.get('user_data')
-    user_data[clave] = nuevo_valor
+
+    # Si es una lista que queremos actualizar, agregar el nuevo valor
+    if agregar_a_lista and isinstance(user_data.get(clave), list):
+        user_data[clave].append(nuevo_valor)
+    else:
+        user_data[clave] = nuevo_valor
+
     session['user_data'] = user_data
 
 def obtenerValorUsuarioSesion(clave):

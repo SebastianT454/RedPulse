@@ -152,10 +152,10 @@ def solicitud_donacion():
     
     if request.method == 'POST':
         # Crear el registro en el sistema.
-        registro = crearRegistro(request, user_data)
+        registro_creado = crearRegistro(request, user_data)
 
         # Almacenar el resultado de la operacion
-        session['registro_creado'] = registro
+        session['registro_creado'] = registro_creado
 
     return render_template('solicitud_donacion.html', user_data=user_data)
 
