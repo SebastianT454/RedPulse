@@ -57,17 +57,20 @@ def generarUsuarioSesion(nombre_completo: str, contrasena: str, codigo_recuperac
 
 def generarUsuarioImagen(imagen, imgur_handler):
     if imagen and imagen.filename:
-        image_data = imgur_handler.send_image(imagen)
+        try:
+            image_data = imgur_handler.send_image(imagen)
 
-        # Si no se pudo guardar, colocar la imagen por default
-        if not image_data["success"]:
-            return secret_config.DEFAULT_PROFILE_PICTURE, ""
-        
-        # Guardar la imagen exitosa
-        perfil_imagen_link = image_data["data"]["link"]
-        perfil_imagen_deletehash = image_data["data"]["deletehash"]
+            # Si no se pudo guardar, colocar la imagen por default
+            if not image_data["success"]:
+                return secret_config.DEFAULT_PROFILE_PICTURE, ""
+            
+            # Guardar la imagen exitosa
+            perfil_imagen_link = image_data["data"]["link"]
+            perfil_imagen_deletehash = image_data["data"]["deletehash"]
 
-        return perfil_imagen_link, perfil_imagen_deletehash
+            return perfil_imagen_link, perfil_imagen_deletehash
+        except:
+            return None,None
          
     return secret_config.DEFAULT_PROFILE_PICTURE, ""
 
