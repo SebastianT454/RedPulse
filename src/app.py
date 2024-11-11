@@ -236,7 +236,7 @@ def enfermero():
                 'tipo_cedula_usuario': tipo_de_cedula_ingresada
             }
         
-    return render_template('enfermero.html')
+    return render_template('enfermero.html', nombre_enfermero = user_data['nombre'])
     
 @app.route('/agregar_donacion', methods=['GET', 'POST'])
 def agregar_donacion():
@@ -319,7 +319,7 @@ def registro():
             # Enviar la imagen a Imgur y guardarla.
             imagen = request.files.get('perfil_imagen')
 
-            
+
             usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
 
             # Crear codigo de recuperacion
@@ -394,4 +394,4 @@ def reestablecer_contrasena():
     return render_template('reestablecer_contrasena.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5000, debug=True)
