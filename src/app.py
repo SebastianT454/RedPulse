@@ -318,6 +318,8 @@ def registro():
 
             # Enviar la imagen a Imgur y guardarla.
             imagen = request.files.get('perfil_imagen')
+
+            
             usuario.perfil_imagen_link, usuario.perfil_imagen_deletehash = generarUsuarioImagen(imagen, imgur_handler)
 
             # Crear codigo de recuperacion
