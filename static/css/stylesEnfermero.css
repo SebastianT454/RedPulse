@@ -186,3 +186,15 @@ body {
     cursor: pointer;
     border-radius: 5px;
 }
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: #333;
+    background-color: #fff;
+    font-family: 'Quicksand', sans-serif;
+    appearance: none;
+    cursor: pointer;
+}

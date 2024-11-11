@@ -7,12 +7,19 @@
     <link rel="stylesheet" href="/css/stylesChatbot.css">
 </head>
 <body>
+
+    <!-- Botón Regresar -->
+    <a href="javascript:void(0);" onclick="history.back()" class="go-back">
+        &#8592; Regresar
+    </a>
+    
     <!-- Encabezado RedPulse -->
     <header class="header">
         <a href="{{ url_for('home') }}" class="no-underline">
             <h1><span class="red">Red</span><span class="pulse">Pulse</span><span class="dot">●</span></h1>
         </a>
     </header>
+
 
     <!-- Contenedor del Chatbot -->
     <div class="chatbot-container">

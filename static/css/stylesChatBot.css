@@ -31,8 +31,7 @@ body {
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-left : 30px; /* Aumentado para mayor separación */
-    transition: transform 0.3s ease;
+    margin-top: 50px; /* Para dar espacio al botón regresar */
 }
 
 .header:hover {
@@ -150,3 +149,19 @@ body {
 .no-underline {
     text-decoration: none;
 }
+
+.go-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.go-back:hover {
+    color: #B93A32;
+}
+
