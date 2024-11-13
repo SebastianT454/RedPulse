@@ -3,11 +3,11 @@
 ## ¿Quién hizo esto?
 Estudiantes de Ing Sistemas:
 
-- Sebastián Tamayo 
-- Juan Manuel Yepes
-- Valentina Carmona
-- Nicolas Bernal
-- Eritz Sanchez
+- Sebastián Tamayo - https://github.com/SebastianT454
+- Juan Manuel Yepes - https://github.com/OnemaYepes
+- Valentina Carmona - https://github.com/valecarmona54
+- Nicolas Bernal - https://github.com/NicolasBernal1
+- Eritz Sanchez - https://github.com/EritzSM
 
 ## ¿Qué es y para qué es?
 
