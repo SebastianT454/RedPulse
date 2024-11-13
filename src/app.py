@@ -139,7 +139,7 @@ def chatbot():
         respuesta = generate_response(usuario_mensaje_ingresado)
         return jsonify(respuesta=respuesta)
     
-    return render_template('chatBot.html')
+    return render_template('chatbot.html')
 
 @app.route('/solicitud_donacion', methods=['GET', 'POST'])
 def solicitud_donacion():
@@ -394,4 +394,4 @@ def reestablecer_contrasena():
     return render_template('reestablecer_contrasena.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000) # debug=True --> cuando se use localmente
