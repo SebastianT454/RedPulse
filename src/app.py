@@ -366,8 +366,8 @@ def solicitar_recuperacion():
     
     return render_template('solicitar_recuperacion.html')
 
-@app.route('/reestablecer_contrasena', methods=['GET', 'POST'])
-def reestablecer_contrasena():
+@app.route('/restablecer_contrasena', methods=['GET', 'POST'])
+def restablecer_contrasena():
     # Verificar si ya hay datos de usuario en la sesión
     if 'user_data' in session:
         return redirect(url_for('home'))
@@ -382,7 +382,7 @@ def reestablecer_contrasena():
         # verificar si el codigo ingresado y las contraseñas son iguales.
         if codigo_recuperacion != codigo_recuperacion_ingresado or nueva_contrasena != confirmacion_nueva_contrasena:
             session['cambio_contrasena_exitoso'] = False
-            return render_template('reestablecer_contrasena.html')
+            return render_template('restablecer_contrasena.html')
         
         session['cambio_contrasena_exitoso'] = True
 
@@ -391,7 +391,7 @@ def reestablecer_contrasena():
         session['correo_recuperacion_asociado'] = None
         session['correo_valido_resultado'] = None
     
-    return render_template('reestablecer_contrasena.html')
+    return render_template('restablecer_contrasena.html')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000) # debug=True --> cuando se use localmente
